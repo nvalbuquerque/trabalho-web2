@@ -1,1 +1,41 @@
-<p>home-funcionario works!</p>
+<h2>Portal do Funcionário</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Data/Hora da Solicitação</th>
+      <th>Cliente</th>
+      <th>Descrição do Produto</th>
+      <th>-</th>
+    </tr>
+  </thead>
+<tbody>
+
+  @for (solicitacao of solicitacoesAbertas; track solicitacao.id) {
+
+    <tr>
+
+      <td>
+        {{ solicitacao.data | date:'dd/MM/yyyy HH:mm' }}
+      </td>
+
+      <td>
+        {{ solicitacao.cliente?.nome }}
+      </td>
+
+      <td>
+        {{ solicitacao.descricaoEquipamento | slice:0:30 }}
+      </td>
+
+      <td>
+        <button>
+          Efetuar Orçamento
+        </button>
+      </td>
+
+    </tr>
+
+  }
+
+</tbody>
+</table>
