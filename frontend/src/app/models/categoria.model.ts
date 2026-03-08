@@ -1,2 +1,2 @@
-export interface Categoria {
+export interface CategoriaEquipamento {
 }

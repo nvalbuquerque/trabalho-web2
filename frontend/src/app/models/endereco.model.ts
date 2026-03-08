@@ -1,2 +1,2 @@
-export interface Endereci {
+export interface Endereco {
 }

@@ -46,7 +46,7 @@ export const mockSolicitacao: Solicitacao[] = [
     descricaoEquipamento: 'Teclado Marca Razer',
     descricaoDefeito: 'Luz não acende',
     dataHora: '2026-03-01 14:30',
-    estado: 'PENDENTE',
+    estado: 'REDIRECIONADA',
     clienteId: 30,
     categoriaId: 500,
     valorOrcamento: 500
@@ -76,7 +76,7 @@ export const mockSolicitacao: Solicitacao[] = [
     descricaoEquipamento: 'SSD Kingston',
     descricaoDefeito: 'Não esta reconhecendo',
     dataHora: '2026-03-01 17:40',
-    estado: 'PENDENTE',
+    estado: 'REJEITADA',
     clienteId: 40,
     categoriaId: 200,
     valorOrcamento: 250
@@ -86,7 +86,7 @@ export const mockSolicitacao: Solicitacao[] = [
     descricaoEquipamento: 'Teclado Corsair',
     descricaoDefeito: 'Tecla quebrada',
     dataHora: '2026-03-02 08:20',
-    estado: 'REJEITADA',
+    estado: 'ARRUMADA',
     clienteId: 30,
     categoriaId: 500,
     valorOrcamento: 430
@@ -106,7 +106,7 @@ export const mockSolicitacao: Solicitacao[] = [
     descricaoEquipamento: 'Notebook Acer',
     descricaoDefeito: 'Bateria não carrega',
     dataHora: '2026-03-02 10:30',
-    estado: 'PENDENTE',
+    estado: 'PAGA',
     clienteId: 20,
     categoriaId: 100,
     valorOrcamento: 400
@@ -146,7 +146,7 @@ export const mockSolicitacao: Solicitacao[] = [
     descricaoEquipamento: 'Placa-Mãe ASUS',
     descricaoDefeito: 'Não detecta memória RAM',
     dataHora: '2026-03-02 14:15',
-    estado: 'APROVADA',
+    estado: 'ORCADA',
     clienteId: 30,
     categoriaId: 200,
     valorOrcamento: 550
@@ -176,7 +176,7 @@ export const mockSolicitacao: Solicitacao[] = [
     descricaoEquipamento: 'Notebook HP',
     descricaoDefeito: 'Tela preta',
     dataHora: '2026-03-02 16:30',
-    estado: 'PENDENTE',
+    estado: 'FINALIZADA',
     clienteId: 20,
     categoriaId: 100,
     valorOrcamento: 450
@@ -196,7 +196,7 @@ export const mockSolicitacao: Solicitacao[] = [
     descricaoEquipamento: 'SSD Samsung',
     descricaoDefeito: 'Dados corrompidos',
     dataHora: '2026-03-02 17:50',
-    estado: 'REJEITADA',
+    estado: 'ABERTA',
     clienteId: 40,
     categoriaId: 200,
     valorOrcamento: 400

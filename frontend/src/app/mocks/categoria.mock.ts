@@ -1,6 +1,6 @@
-import { Categoria } from '../models/categoria.model';
+import { CategoriaEquipamento } from '../models/categoria.model';
 
-export const mockCategoria: Categoria[] = [
+export const mockCategoria: CategoriaEquipamento[] = [
     {
       id: 100,
       nome: "Notebook",
