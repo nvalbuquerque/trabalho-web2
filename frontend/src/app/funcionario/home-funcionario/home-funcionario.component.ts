@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Solicitacao } from '../../models/interfaces';
-
+import { Solicitacao } from '../../models/solicitacao.model';
+import { SolicitacaoENUM } from '../../models/solicitacaoENUM.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home-funcionario',
@@ -13,46 +14,83 @@ import { Solicitacao } from '../../models/interfaces';
 export class HomeFuncionarioComponent {
 solicitacoes: Solicitacao[] = [
   {
-    data: '2026-03-03T10:30:00',
+    id: 1,
+    dataHoraCriacao: '2026-03-03T10:30:00',
     descricaoEquipamento: 'Notebook Dell',
     descricaoDefeito: 'Não está carregando',
-    estado: 'ABERTA' as any,
-    cliente: { nome: 'Daniela' } as any
+    estadoAtual: SolicitacaoENUM.ABERTA,
+    cliente: {
+      cpf: '11111111111',
+      nome: 'Daniela',
+      email: 'daniela@email.com',
+      telefone: '41999999999'
+    }
   },
   {
-    data: '2026-02-06T11:10:00',
+    id: 2,
+    dataHoraCriacao: '2026-02-06T11:10:00',
     descricaoEquipamento: 'Impressora HP',
     descricaoDefeito: 'Travando papel constantemente e imprimindo com cores erradas',
-    estado: 'ABERTA' as any,
-    cliente: { nome: 'Laura' } as any
+    estadoAtual: SolicitacaoENUM.ABERTA,
+    cliente: {
+      cpf: '22222222222',
+      nome: 'Laura',
+      email: 'laura@email.com',
+      telefone: '41988888888'
+    }
   },
   {
-    data: '2026-03-01T12:00:00',
+    id: 3,
+    dataHoraCriacao: '2026-03-01T12:00:00',
     descricaoEquipamento: 'Computador',
     descricaoDefeito: 'Muito lento',
-    estado: 'ABERTA' as any,
-    cliente: { nome: 'Jess' } as any
+    estadoAtual: SolicitacaoENUM.ABERTA,
+    cliente: {
+      cpf: '33333333333',
+      nome: 'Jess',
+      email: 'jess@email.com',
+      telefone: '41977777777'
+    }
   },
   {
-    data: '2026-03-06T13:20:00',
+    id: 4,
+    dataHoraCriacao: '2026-03-06T13:20:00',
     descricaoEquipamento: '1234567890123456789012345678901234567890',
     descricaoDefeito: 'Tela danificada',
-    estado: 'FECHADA' as any,
-    cliente: { nome: 'Nathalia' } as any
+    estadoAtual: SolicitacaoENUM.FINALIZADA,
+    cliente: {
+      cpf: '44444444444',
+      nome: 'Nathalia',
+      email: 'nath@email.com',
+      telefone: '41966666666'
+    }
   },
-
-    {
-    data: '2026-03-06T13:20:00',
+  {
+    id: 5,
+    dataHoraCriacao: '2026-03-06T13:20:00',
     descricaoEquipamento: '1234567890123456789012345678901234567890',
     descricaoDefeito: 'Tela trincada',
-    estado: 'ABERTA' as any,
-    cliente: { nome: 'Felipe' } as any
+    estadoAtual: SolicitacaoENUM.ABERTA,
+    cliente: {
+      cpf: '55555555555',
+      nome: 'Felipe',
+      email: 'felipe@email.com',
+      telefone: '41955555555'
+    }
   }
 ];
 
-  get solicitacoesAbertas() {
-    return this.solicitacoes.filter(s => s.estado === 'ABERTA');
-  }
+get solicitacoesAbertas() {
+  return this.solicitacoes.filter(
+    s => s.estadoAtual === SolicitacaoENUM.ABERTA
+  );
+}
+
+constructor(private router: Router) {}
+
+efetuarOrcamento(id?: number) {
+  this.router.navigate(['/funcionario/efetuar-orcamento', id]);
+}
 
 
 }

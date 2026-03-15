@@ -5,6 +5,9 @@ import { HomeClienteComponent } from './cliente/home-cliente/home-cliente.compon
 import { HomeFuncionarioComponent } from './funcionario/home-funcionario/home-funcionario.component';
 import { CrudCategoriaComponent } from './funcionario/crud-categoria/crud-categoria.component';
 import { CrudFuncionariosComponent } from './funcionario/crud-funcionarios/crud-funcionarios.component';
+import { EfetuarOrcamentoComponent } from './funcionario/efetuar-orcamento/efetuar-orcamento.component';
+import { VisualizarSolicitacoesComponent } from './funcionario/visualizar-solicitacoes/visualizar-solicitacoes.component';
+
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -13,6 +16,8 @@ export const routes: Routes = [
   { path: 'funcionario', component: HomeFuncionarioComponent },
   { path: 'funcionario/categorias', component: CrudCategoriaComponent },
   { path: 'funcionario/funcionarios', component: CrudFuncionariosComponent },
+  { path: 'funcionario/efetuar-orcamento/:id', component: EfetuarOrcamentoComponent },
+  { path: 'funcionario/visualizar-solicitacoes', component: VisualizarSolicitacoesComponent },
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: '**', redirectTo: 'login' },
 ];

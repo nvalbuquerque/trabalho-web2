@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CategoriaEquipamento } from '../../models/interfaces';
+import { CategoriaEquipamento } from '../../models/categoria.model';
 
 @Component({
   selector: 'app-crud-categoria',
@@ -11,15 +11,15 @@ import { CategoriaEquipamento } from '../../models/interfaces';
 })
 export class CrudCategoriaComponent {
   categorias: CategoriaEquipamento[] = [
-    { id: 100, nome: 'Laptop', quantidade: 50, ativa: true },
-    { id: 101, nome: 'Ultrabook', quantidade: 45, ativa: true },
-    { id: 200, nome: 'Desktop torre', quantidade: 30, ativa: true },
-    { id: 201, nome: 'All-in-One', quantidade: 20, ativa: false },
-    { id: 300, nome: 'Impressora jato de tinta', quantidade: 20, ativa: true },
-    { id: 301, nome: 'Impressora laser', quantidade: 25, ativa: true },
-    { id: 400, nome: 'Monitor LED', quantidade: 80, ativa: false },
-    { id: 401, nome: 'Mouse sem fio', quantidade: 150, ativa: true },
-    { id: 500, nome: 'Teclado mecânico', quantidade: 50, ativa: true },
+    { id: 100, nome: 'Laptop', quantidade: 10, ativa: true },
+    { id: 101, nome: 'Ultrabook', quantidade: 5, ativa: true },
+    { id: 200, nome: 'Desktop torre', quantidade: 12, ativa: true },
+    { id: 201, nome: 'All-in-One', quantidade: 2, ativa: true },
+    { id: 300, nome: 'Impressora jato de tinta', quantidade: 5, ativa: true },
+    { id: 301, nome: 'Impressora laser', quantidade: 8, ativa: true },
+    { id: 400, nome: 'Monitor LED', quantidade: 2, ativa: true },
+    { id: 401, nome: 'Mouse sem fio', quantidade: 0, ativa: false },
+    { id: 500, nome: 'Teclado mecânico', quantidade: 0, ativa: false },
 
   ];
 
