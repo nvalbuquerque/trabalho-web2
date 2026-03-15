@@ -4,31 +4,31 @@ export const mockCategoria: CategoriaEquipamento[] = [
     {
       id: 100,
       nome: "Notebook",
-      descricao: "Inclui laptops e ultrabooks.",
+      ativa: true,
       quantidade: 50,
    },
     {
       id: 200,
       nome: "Desktop",
-      descricao: "Inclui torres e all-in-one.",
+      ativa: true,
       quantidade: 30,
   },
    {
       id: 300,
       nome: "Impressora",
-      descricao: "Inclui impressoras jato de tinta e laser.",
+      ativa: true,
       quantidade: 20,
   },
    {
       id: 400,
       nome: "Mouse",
-      descricao: "Inclui mouses ópticos e sem fio.",
+      ativa: true,
       quantidade: 100,
   },
   {
       id: 500,
       nome: "Teclado",
-      descricao: "Inclui teclados mecânicos e de membrana.",
+      ativa: true,
       quantidade: 50,
   }
 ];
