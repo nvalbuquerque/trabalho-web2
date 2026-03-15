@@ -23,19 +23,19 @@ export class EfetuarOrcamentoComponent {
 
     const id = this.route.snapshot.paramMap.get('id');
 
-    this.solicitacao = {
-      id: Number(id),
-      dataHoraCriacao: '2026-03-03T10:30:00',
-      descricaoEquipamento: 'Notebook Dell',
-      descricaoDefeito: 'Não está carregando',
-      estadoAtual: SolicitacaoENUM.ABERTA,
-      cliente: {
-        nome: 'Daniela',
-        email: 'daniela@email.com',
-        telefone: '41999999999'
-      } as any
-    };
-
+  this.solicitacao = {
+    id: Number(id),
+    dataHoraCriacao: '2026-03-03T10:30:00',
+    descricaoEquipamento: 'Notebook Dell',
+    descricaoDefeito: 'Não está carregando',
+    estadoAtual: SolicitacaoENUM.ABERTA,
+    cliente: {
+      cpf: '12345678900',
+      nome: 'Daniela',
+      email: 'daniela@email.com',
+      telefone: '41999999999'
+    }
+  };
   }
 
   registrarOrcamento() {
@@ -47,7 +47,6 @@ export class EfetuarOrcamentoComponent {
 
     alert("Orçamento registrado com sucesso!");
 
-    console.log(this.solicitacao);
   }
 
 }

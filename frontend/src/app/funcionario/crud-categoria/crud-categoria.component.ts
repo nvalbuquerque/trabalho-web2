@@ -11,9 +11,9 @@ import { CategoriaEquipamento } from '../../models/categoria.model';
 })
 export class CrudCategoriaComponent {
   categorias: CategoriaEquipamento[] = [
-    { id: 100, nome: 'Notebooks', descricao: 'Inclui laptops e ultrabooks.', ativa: true },
-    { id: 200, nome: 'Desktop', descricao: 'Inclui torres e all-in-one.', ativa: true },
-    { id: 300, nome: 'Impressoras', descricao: 'Inclui impressoras jato de tinta e laser.', ativa: true }
+    { id: 100, nome: 'Notebooks', quantidade: 10, ativa: true },
+    { id: 200, nome: 'Desktop', quantidade: 5, ativa: true },
+    { id: 300, nome: 'Impressoras', quantidade: 8, ativa: true }
   ];
 
   get categoriasAtivas() {

@@ -3,7 +3,7 @@ export interface CategoriaEquipamento {
 
   nome: string;
 
-  descricao?: string;
+  quantidade: number;
 
   ativa?: boolean;
 }
