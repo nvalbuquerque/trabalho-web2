@@ -1,29 +1,39 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HeaderComponent } from '../../shared/header/header.component';
+import { ActivatedRoute } from '@angular/router';
+//import { HeaderComponent } from '../../shared/header/header.component';
 import { mockSolicitacao } from '../..//mocks/solicitacao.mock';
-import { mockCliente } from '../..//mocks/clientes.mock';
-import { mockFuncionario } from '../../mocks/funcionario.mock'
+import { Solicitacao } from '../../models/solicitacao.model';
+import { Funcionario } from '../../models/funcionario.model';
+import { Cliente } from '../../models/cliente.model';
 
 @Component({
   selector: 'app-mostrar-orcamento',
   standalone: true,
-  imports: [CommonModule, HeaderComponent],
+  imports: [CommonModule],
   templateUrl: './mostrar-orcamento.component.html',
   styleUrl: './mostrar-orcamento.component.css',
 })
 
 export class MostrarOrcamentoComponent implements OnInit {
-      solicitacao: any;
-      cliente: any;
-      funcionario: any;
+  constructor(private route: ActivatedRoute) {}
+
+      solicitacao: Solicitacao | undefined;
+      cliente: Cliente | undefined;
+      funcionario: Funcionario | undefined;
 
       ngOnInit(): void {
-        this.solicitacao = mockSolicitacao[1];
-        this.cliente = mockCliente.find((c: any) => c.id === this.solicitacao.cliente_id);
-        this.cliente = mockCliente[1];
-        this.funcionario = mockFuncionario[1];
- }
+        const idParam = this.route.snapshot.paramMap.get('id');
+        if (!idParam) return;
+
+        const id = Number(idParam);
+        this.solicitacao = mockSolicitacao.find(s => s.id === id);
+        
+        if (this.solicitacao) {
+          this.cliente = this.solicitacao.cliente;
+          this.funcionario = this.solicitacao.funcionarioResponsavel;
+        }
+      }
 
  exibirModal: boolean = false;
  estadoModal: 'confirmacao' | 'sucesso' = 'confirmacao';
@@ -32,14 +42,12 @@ export class MostrarOrcamentoComponent implements OnInit {
   this.estadoModal = 'confirmacao';
   this.exibirModal = true;
  } 
-
   confirmarAprovacao(): void {
   if (this.solicitacao) {
-    this.solicitacao.status = 'APROVADA';
+    this.solicitacao.estadoAtual = 'APROVADA';
 }
   this.estadoModal = 'sucesso';
-  }
-// Função para fechar a mensagem
+}
 fecharModal(): void {
   this.exibirModal = false;
   }

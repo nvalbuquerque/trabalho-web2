@@ -1,4 +1,4 @@
-<div class="orcamento-container">
+<div class="orcamento-container" >
   <div class="orcamento-card">
     
     <div class="card-content">
@@ -35,7 +35,7 @@
           </div>
           <div class="info-box">
             <p class="texto-defeito">{{ solicitacao?.descricaoDefeito }}</p>
-            <a href="#" class="link-leia-mais">Leia mais</a> <!-- AJUSTAR PARA QUE SEJA FUNCIONAL -->
+            <a class="link-leia-mais">Leia mais</a> <!-- AJUSTAR PARA QUE SEJA FUNCIONAL -->
           </div>
         </div>
       </div>
@@ -45,14 +45,14 @@
       <div class="coluna-direita">
         
         <div class="status-badge arrumada"
-         [ngClass]="solicitacao?.estado.toLowerCase()">
-         {{ solicitacao?.estado}}
+         [ngClass]="solicitacao?.estadoAtual?.toLowerCase()">
+         {{ solicitacao?.estadoAtual }}
         </div>  <!-- AJUSTAR AS CORES DE CADA STATUS -->
  
          <div class="info-group">
           <h2>LAUDO TÉCNICO:</h2>
           <div class="info-box box-cinza">
-            <p>Problema no processador</p> <!-- AJUSTAR NO MOCK SOLICIT e ADICIONAR AQUI-->
+            <p>{{ solicitacao?.descricaoManutencao }}</p> <!-- AJUSTAR NO MOCK SOLICIT e ADICIONAR AQUI-->
           </div>
         </div>
       
@@ -66,7 +66,7 @@
         <div class="info-group valor-total-group">
           <h2>VALOR TOTAL:</h2>
           <div class="info-box box-total">
-            <p class="texto-total">R$ {{ solicitacao?.valorOrcamento | number:'1.2-2' }}</p>
+            <p class="texto-total">R$ {{ solicitacao?.valorOrcado | number:'1.2-2' }}</p>
           </div>
         </div>
 
