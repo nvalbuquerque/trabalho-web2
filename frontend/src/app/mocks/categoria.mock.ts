@@ -3,32 +3,56 @@ import { CategoriaEquipamento } from '../models/categoria.model';
 export const mockCategoria: CategoriaEquipamento[] = [
     {
       id: 100,
-      nome: "Notebook",
-      descricao: "Inclui laptops e ultrabooks.",
-      quantidade: 50,
+      nome: "Laptop",
+      quantidade: 10,
    },
+
+   {
+      id: 101,
+      nome: "Ultrabook",
+      quantidade: 5,
+   },
+
     {
       id: 200,
-      nome: "Desktop",
-      descricao: "Inclui torres e all-in-one.",
-      quantidade: 30,
+      nome: "Desktop torre",
+      quantidade: 12,
   },
+
+  {
+      id: 201,
+      nome: "Desktop all in-one",
+      quantidade: 2,
+  },
+
    {
       id: 300,
-      nome: "Impressora",
-      descricao: "Inclui impressoras jato de tinta e laser.",
-      quantidade: 20,
+      nome: "Impressora jato de tinta",
+      quantidade: 5,
   },
+
+  {
+      id: 301,
+      nome: "Impressora laser",
+      quantidade: 8,
+  },
+
    {
       id: 400,
-      nome: "Mouse",
-      descricao: "Inclui mouses ópticos e sem fio.",
-      quantidade: 100,
+      nome: "Monitor LED",
+      quantidade: 2,
   },
+
+   {
+      id: 401,
+      nome: "Mouse sem fio",
+      quantidade: 0,
+  },
+
   {
       id: 500,
-      nome: "Teclado",
-      descricao: "Inclui teclados mecânicos e de membrana.",
-      quantidade: 50,
-  }
+      nome: "Teclado mecânico",
+      quantidade: 0,
+  },
+  
 ];
