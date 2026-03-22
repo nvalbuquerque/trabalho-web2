@@ -33,7 +33,7 @@
             <textarea matInput name="defeito" [(ngModel)]="solicitacao.descricaoDefeito" 
                       rows="8" required 
                       placeholder="Ex: O notebook liga, mas a tela fica preta e faz um bipe contínuo..."></textarea>
-            <mat-hint align="end">0/20</mat-hint>
+            <mat-hint align="end"> {{ solicitacao.descricaoDefeito?.length || 0 }} / 200 </mat-hint>
           </mat-form-field>
         </div>
 
