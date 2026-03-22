@@ -1,0 +1,21 @@
+   @if (titulo) {
+  <h4>{{ titulo }}</h4>
+}
+
+<div class="campo-container largura-total">
+  <textarea
+    class="campo-textarea"
+    [placeholder]="placeholder"
+    [value]="valor"
+    (input)="aoDigitar($event)"
+    #inputRef>
+  </textarea>
+</div>
+
+<div class="contador-container largura-total">
+  @if (minimoCaracteres > 0) {
+    <span class="contador-texto">
+      {{ inputRef.value.length }}/{{ minimoCaracteres }}
+    </span>
+  }
+</div>

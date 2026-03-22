@@ -1,17 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MostrarOrcamentoComponent } from './mostrar-orcamento.component';
 
-describe('MostrarOrcamento', () => {
-  let component: MostrarOrcamentoComponent;
-  let fixture: ComponentFixture<MostrarOrcamentoComponent>;
+import { TextAreaComponent } from './text-area.component';
+
+describe('TextAreaComponent', () => {
+  let component: TextAreaComponent;
+  let fixture: ComponentFixture<TextAreaComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MostrarOrcamentoComponent]
+      imports: [TextAreaComponent]
     })
     .compileComponents();
-
-    fixture = TestBed.createComponent(MostrarOrcamentoComponent);
+    
+    fixture = TestBed.createComponent(TextAreaComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
