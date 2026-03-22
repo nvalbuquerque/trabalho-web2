@@ -8,12 +8,14 @@ import { CrudFuncionariosComponent } from './funcionario/crud-funcionarios/crud-
 import { EfetuarOrcamentoComponent } from './funcionario/efetuar-orcamento/efetuar-orcamento.component';
 import { VisualizarSolicitacoesComponent } from './funcionario/visualizar-solicitacoes/visualizar-solicitacoes.component';
 import { MostrarOrcamentoComponent } from './cliente/mostrar-orcamento/mostrar-orcamento.component';
+import { SolicitarManutencaoComponent } from './cliente/solicitar-manutencao/solicitar-manutencao.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'autocadastro', component: AutocadastroComponent },
   { path: 'cliente', component: HomeClienteComponent },
   { path: 'cliente/mostrar-orcamento/:id', component: MostrarOrcamentoComponent},
+  { path: 'cliente/solicitar-manutencao', component: SolicitarManutencaoComponent},
   { path: 'funcionario', component: HomeFuncionarioComponent },
   { path: 'funcionario/categorias', component: CrudCategoriaComponent },
   { path: 'funcionario/funcionarios', component: CrudFuncionariosComponent },
