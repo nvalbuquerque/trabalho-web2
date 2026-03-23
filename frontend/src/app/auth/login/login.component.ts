@@ -1,32 +1,47 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { MatCardModule } from '@angular/material/card';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [
+    CommonModule, 
+    FormsModule, 
+    RouterLink, 
+    MatCardModule, 
+    MatInputModule, 
+    MatFormFieldModule, 
+    MatButtonModule, 
+    MatIconModule
+  ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
-  usuario = {
-    email: '',
-    senha: ''
-  };
-
+  usuario = { email: '', 
+  senha: '' };
   constructor(private router: Router) {}
 
   efetuarLogin() {
-    console.log('Tentativa de login com:', this.usuario.email);
+  let nomeExibicao = localStorage.getItem('nomeUsuarioCadastrado');
 
-    if (this.usuario.email.includes('funcionario')) {
-      alert('Login realizado como Funcionário!');
-      this.router.navigate(['/funcionario/home']);
+  if (!nomeExibicao) {
+    nomeExibicao = this.usuario.email.split('@')[0];
+  }
+
+  localStorage.setItem('usuarioSessao', nomeExibicao);
+
+    if (this.usuario.email.toLowerCase().includes('func')) {
+      this.router.navigate(['/funcionario']);
     } else {
-      alert('Login realizado como Cliente!');
-      this.router.navigate(['/cliente/home']);
+      this.router.navigate(['/cliente']);
     }
   }
 }

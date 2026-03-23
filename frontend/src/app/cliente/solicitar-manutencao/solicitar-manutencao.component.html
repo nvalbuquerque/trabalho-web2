@@ -1,0 +1,57 @@
+<div class="solicitacao-container">
+  <mat-card class="solicitacao-card">
+    <mat-card-content>
+      <div class="header-text">
+        <h1>Solicitação de Manutenção</h1>
+        <p>Preencha os dados abaixo para que nossos técnicos possam avaliar seu equipamento.</p>
+        <hr class="divider">
+      </div>
+
+      <form #f="ngForm" class="flex-column">
+        <div class="flex-row gap-24">
+          <div class="flex-1 field-group">
+            <label class="field-label">Categoria do Equipamento:</label>
+            <mat-form-field appearance="outline">
+              <mat-select name="categoria" [(ngModel)]="solicitacao.categoria" required>
+                <mat-option value="" disabled>Selecione uma opção</mat-option>
+                <mat-option *ngFor="let cat of categorias" [value]="cat">{{cat}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div class="flex-1 field-group">
+            <label class="field-label">Descrição do Equipamento:</label>
+            <mat-form-field appearance="outline">
+              <input matInput name="modelo" [(ngModel)]="solicitacao.modelo" required placeholder="Dell Inspiron 15">
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Defeito:</label>
+          <mat-form-field appearance="outline" class="w-100">
+            <textarea matInput name="defeito" [(ngModel)]="solicitacao.descricaoDefeito" 
+                      rows="8" required 
+                      placeholder="Ex: O notebook liga, mas a tela fica preta e faz um bipe contínuo..."></textarea>
+            <mat-hint align="end"> {{ solicitacao.descricaoDefeito?.length || 0 }} / 200 </mat-hint>
+          </mat-form-field>
+        </div>
+
+        <div class="previsao-texto">
+          Previsão de análise 24h úteis
+        </div>
+
+        <div class="flex-row justify-between mt-24">
+          <button mat-stroked-button type="button" class="btn-cancelar" routerLink="/cliente">
+            Cancelar Solicitação
+          </button>
+          
+          <button mat-raised-button type="button" class="btn-enviar"
+                  [disabled]="!f.valid" (click)="salvarSolicitacao()">
+            Enviar Solicitação
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

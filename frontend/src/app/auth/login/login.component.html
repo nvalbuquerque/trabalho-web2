@@ -1,26 +1,20 @@
 <div class="login-wrapper">
-  <div class="card shadow-sm login-card">
-    <div class="card-body">
-      <h3 class="card-title text-center mb-4">Acesso ao Sistema</h3>
-      
-      <form (ngSubmit)="efetuarLogin()" #formLogin="ngForm">
-        <div class="mb-3">
-          <label for="email" class="form-label">E-mail</label>
-          <input type="email" id="email" name="email" class="form-control" 
-                 [(ngModel)]="usuario.email" required placeholder="Digite seu e-mail">
-        </div>
-
-        <div class="mb-3">
-          <label for="senha" class="form-label">Senha</label>
-          <input type="password" id="senha" name="senha" class="form-control" 
-                 [(ngModel)]="usuario.senha" required maxlength="4" placeholder="****">
-          <small class="text-muted">A senha possui 4 números.</small>
-        </div>
-
-        <button type="submit" class="btn btn-primary w-100 mt-3" [disabled]="!formLogin.valid">
-          Entrar
-        </button>
+  <mat-card class="login-card">
+    <mat-card-header>
+      <mat-card-title>Acesso TechSolution</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form #f="ngForm" (ngSubmit)="efetuarLogin()" class="flex-column">
+        <mat-form-field appearance="outline">
+          <mat-label>E-mail</mat-label>
+          <input matInput type="email" name="email" [(ngModel)]="usuario.email" required>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Senha</mat-label>
+          <input matInput type="password" name="senha" [(ngModel)]="usuario.senha" required>
+        </mat-form-field>
+        <button mat-raised-button color="primary" [disabled]="!f.valid">Entrar</button>
       </form>
-    </div>
-  </div>
+    </mat-card-content>
+  </mat-card>
 </div>

@@ -1,56 +1,66 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { Router } from '@angular/router';
+import { MatCardModule } from '@angular/material/card';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-autocadastro',
   standalone: true,
-  imports: [CommonModule, FormsModule, HttpClientModule],
+  imports: [
+    CommonModule, 
+    FormsModule, 
+    RouterLink, 
+    HttpClientModule,
+    MatCardModule, 
+    MatInputModule, 
+    MatFormFieldModule, 
+    MatButtonModule, 
+    MatIconModule
+  ],
   templateUrl: './autocadastro.component.html',
   styleUrls: ['./autocadastro.component.css']
 })
 export class AutocadastroComponent {
   cliente = {
-    cpf: '',
-    nome: '',
-    email: '',
-    telefone: '',
+    cpf: '', 
+    nome: '', 
+    email: '', 
+    telefone: '', 
     cep: '',
-    logradouro: '',
-    numero: '',
-    complemento: '',
-    bairro: '',
-    cidade: '',
+    logradouro: '', 
+    numero: '', 
+    bairro: '', 
+    cidade: '', 
     estado: ''
   };
 
   constructor(private http: HttpClient, private router: Router) {}
 
   buscarEnderecoPorCep() {
-    const cepLimpo = this.cliente.cep.replace(/\D/g, '');
-    
-    if (cepLimpo.length === 8) {
-      this.http.get(`https://viacep.com.br/ws/${cepLimpo}/json/`).subscribe({
-        next: (dados: any) => {
-          if (!dados.erro) {
-            this.cliente.logradouro = dados.logradouro;
-            this.cliente.bairro = dados.bairro;
-            this.cliente.cidade = dados.localidade;
-            this.cliente.estado = dados.uf;
-          } else {
-            alert('CEP não encontrado. Por favor, digite o endereço manualmente.');
-          }
-        },
-        error: () => alert('Erro ao consultar o serviço de CEP.')
+    const cep = this.cliente.cep.replace(/\D/g, '');
+    if (cep.length === 8) {
+      this.http.get(`https://viacep.com.br/ws/${cep}/json/`).subscribe((dados: any) => {
+        if (!dados.erro) {
+          this.cliente.logradouro = dados.logradouro;
+          this.cliente.bairro = dados.bairro;
+          this.cliente.cidade = dados.localidade;
+          this.cliente.estado = dados.uf;
+        }
       });
     }
   }
 
   salvarCadastro() {
-    console.log('Gravando dados do cliente:', this.cliente);
-    alert('Cadastro realizado com sucesso! Sua senha de 4 dígitos foi enviada para o e-mail.');
+  if (this.cliente.nome) {
+    localStorage.setItem('nomeUsuarioCadastrado', this.cliente.nome);
+  }
+  alert('Cadastro realizado com sucesso! Use seu e-mail para logar.');
     this.router.navigate(['/login']);
   }
 }
