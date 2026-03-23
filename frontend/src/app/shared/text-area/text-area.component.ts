@@ -8,10 +8,9 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
   styleUrl: './text-area.component.css'
 })
 export class TextAreaComponent {
-  @Input() titulo: string = 'Defeito';       
+  @Input() titulo: string = '';       
   @Input() placeholder: string = 'Ex: O notebook não liga';
   @Input() valor: string = '';       
-  @Input() minimoCaracteres: number = 20;
  
   @Output() mudou = new EventEmitter<string>();
 

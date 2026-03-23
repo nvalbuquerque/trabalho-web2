@@ -13,9 +13,9 @@
 </div>
 
 <div class="contador-container largura-total">
-  @if (minimoCaracteres > 0) {
-    <span class="contador-texto">
-      {{ inputRef.value.length }}/{{ minimoCaracteres }}
+    <span class="contador-texto"
+       [class.erro]="inputRef.value.length > 200">
+      {{ inputRef.value.length }}/200
     </span>
-  }
+  
 </div>

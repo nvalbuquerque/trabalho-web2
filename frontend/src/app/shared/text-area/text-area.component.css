@@ -48,3 +48,9 @@ h4 {
   color: #666;
   font-family: sans-serif;
 }
+
+.contador-texto.erro {
+  color: red;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
