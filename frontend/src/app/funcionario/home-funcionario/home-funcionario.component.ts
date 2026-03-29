@@ -3,11 +3,10 @@ import { CommonModule } from '@angular/common';
 import { Solicitacao } from '../../models/solicitacao.model';
 import { SolicitacaoENUM } from '../../models/solicitacaoENUM.model';
 import { Router } from '@angular/router';
-
-@Component({
+import { CardVisualizacaoComponent } from '../../shared/card-visualizacao/card-visualizacao.component';@Component({
   selector: 'app-home-funcionario',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, CardVisualizacaoComponent],
   templateUrl: './home-funcionario.component.html',
   styleUrl: './home-funcionario.component.css'
 })

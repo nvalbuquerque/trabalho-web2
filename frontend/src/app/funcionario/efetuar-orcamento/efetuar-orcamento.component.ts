@@ -4,10 +4,14 @@ import { ActivatedRoute } from '@angular/router';
 import { Solicitacao } from '../../models/solicitacao.model';
 import { SolicitacaoENUM } from '../../models/solicitacaoENUM.model';
 import { FormsModule } from '@angular/forms';
+import { InputComponent } from '../../shared/input/input.component';
+import { CardVisualizacaoComponent } from '../../shared/card-visualizacao/card-visualizacao.component';
+
+
 @Component({
   selector: 'app-efetuar-orcamento',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, CardVisualizacaoComponent, InputComponent],
   templateUrl: './efetuar-orcamento.component.html',
   styleUrl: './efetuar-orcamento.component.css'
 })
@@ -16,6 +20,8 @@ export class EfetuarOrcamentoComponent {
   solicitacao?: Solicitacao;
 
   valorOrcamento: number = 0;
+
+  valorDigitado: string = '';
 
   constructor(private route: ActivatedRoute) {}
 

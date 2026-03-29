@@ -1,0 +1,52 @@
+    <app-card-visualizacao>
+
+
+<h2>Efetuar Manutenção</h2>
+
+<!-- DADOS DA SOLICITAÇÃO -->
+<div class="card">
+  <h3>Solicitação</h3>
+  <p><strong>ID:</strong> {{ solicitacao.id }}</p>
+  <p><strong>Status:</strong> {{ solicitacao.status }}</p>
+  <p><strong>Data:</strong> {{ solicitacao.dataAbertura }}</p>
+</div>
+
+<!-- DADOS DO CLIENTE -->
+<div class="card">
+  <h3>Cliente</h3>
+  <p><strong>Nome:</strong> {{ solicitacao.cliente.nome }}</p>
+  <p><strong>Email:</strong> {{ solicitacao.cliente.email }}</p>
+</div>
+
+<!-- BOTÕES -->
+@if (!mostrarFormulario) {
+  <div>
+    <button (click)="abrirFormulario()">Efetuar Manutenção</button>
+    <button (click)="redirecionar()">Redirecionar</button>
+  </div>
+}
+
+<!-- FORMULÁRIO -->
+@if (mostrarFormulario) {
+  <form [formGroup]="form" class="card">
+
+    <h3>Dados da Manutenção</h3>
+
+    <label>Descrição:</label>
+    <textarea formControlName="descricao"></textarea>
+
+    <br><br>
+
+    <label>Orientações:</label>
+    <textarea formControlName="orientacoes"></textarea>
+
+    <br><br>
+
+    <button (click)="confirmarManutencao()">Confirmar</button>
+
+  </form>
+
+}
+
+</app-card-visualizacao>
+

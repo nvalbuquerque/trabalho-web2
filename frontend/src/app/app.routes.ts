@@ -9,6 +9,7 @@ import { EfetuarOrcamentoComponent } from './funcionario/efetuar-orcamento/efetu
 import { VisualizarSolicitacoesComponent } from './funcionario/visualizar-solicitacoes/visualizar-solicitacoes.component';
 import { MostrarOrcamentoComponent } from './cliente/mostrar-orcamento/mostrar-orcamento.component';
 import { SolicitarManutencaoComponent } from './cliente/solicitar-manutencao/solicitar-manutencao.component';
+import { EfetuarManutencaoComponent } from './funcionario/efetuar-manutencao/efetuar-manutencao.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -21,6 +22,7 @@ export const routes: Routes = [
   { path: 'funcionario/funcionarios', component: CrudFuncionariosComponent },
   { path: 'funcionario/efetuar-orcamento/:id', component: EfetuarOrcamentoComponent },
   { path: 'funcionario/visualizar-solicitacoes', component: VisualizarSolicitacoesComponent },
+  {path: 'funcionario/manutencao/:id', component: EfetuarManutencaoComponent},
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: '**', redirectTo: 'login' },
 ];

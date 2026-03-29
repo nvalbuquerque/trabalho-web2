@@ -1,40 +1,40 @@
-<h2>Portal do Funcionário</h2>
+<app-card-visualizacao>
 
-<table>
-  <thead>
-    <tr>
-      <th>Data/Hora da Solicitação</th>
-      <th>Cliente</th>
-      <th>Descrição do Produto</th>
-      <th>-</th>
-    </tr>
-  </thead>
-<tbody>
+  <h2>Portal do Funcionário</h2>
 
-  @for (solicitacao of solicitacoesAbertas; track solicitacao.id) {
+  <table>
+    <thead>
+      <tr>
+        <th>Data/Hora da Solicitação</th>
+        <th>Cliente</th>
+        <th>Descrição do Produto</th>
+        <th>-</th>
+      </tr>
+    </thead>
 
-    <tr>
+    <tbody>
+      @for (solicitacao of solicitacoesAbertas; track solicitacao.id) {
+        <tr>
+          <td>
+            {{ solicitacao.dataHoraCriacao | date:'dd/MM/yyyy HH:mm' }}
+          </td>
 
-      <td>
-        {{ solicitacao.dataHoraCriacao | date:'dd/MM/yyyy HH:mm' }}      </td>
+          <td>
+            {{ solicitacao.cliente?.nome }}
+          </td>
 
-      <td>
-        {{ solicitacao.cliente?.nome }}
-      </td>
+          <td>
+            {{ solicitacao.descricaoEquipamento | slice:0:30 }}
+          </td>
 
-      <td>
-        {{ solicitacao.descricaoEquipamento | slice:0:30 }}
-      </td>
+          <td>
+            <button (click)="efetuarOrcamento(solicitacao.id)">
+              Efetuar Orçamento
+            </button>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
 
-      <td>
-        <button (click)="efetuarOrcamento(solicitacao.id)">
-          Efetuar Orçamento
-        </button>
-      </td>
-
-    </tr>
-
-  }
-
-</tbody>
-</table>
+</app-card-visualizacao>

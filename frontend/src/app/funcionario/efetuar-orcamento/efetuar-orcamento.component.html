@@ -1,43 +1,56 @@
-<div class="container">
 
-<h2>Efetuar Orçamento</h2>
 
-@if (solicitacao) {
+  @if (solicitacao) {
 
-<div>
+    <app-card-visualizacao>
 
-  <h3>Dados da Solicitação</h3>
+        <h2>Efetuar Orçamento</h2>
 
-  <p><b>Equipamento:</b> {{ solicitacao.descricaoEquipamento }}</p>
-  <p><b>Defeito:</b> {{ solicitacao.descricaoDefeito }}</p>
-  <p><b>Data:</b> {{ solicitacao.dataHoraCriacao | date:'dd/MM/yyyy HH:mm' }}</p>
 
-  <h3>Dados do Cliente</h3>
+      <div class="grid">
 
-  <p><b>Nome:</b> {{ solicitacao.cliente?.nome }}</p>
-  <p><b>Email:</b> {{ solicitacao.cliente?.email }}</p>
-    <p>
-    <b>Telefone:</b>
-    ({{ solicitacao.cliente?.telefone | slice:0:2 }})
-    {{ solicitacao.cliente?.telefone | slice:2:7 }}-
-    {{ solicitacao.cliente?.telefone | slice:7 }}
-    </p>
-  <hr>
+        <div class="col-esquerda">
 
-  <div class="input-valor">
-    <label>Valor do Orçamento</label>
+          <h3>Dados da Solicitação</h3>
 
-    <input
-      type="number"
-      [(ngModel)]="valorOrcamento"
-      placeholder="Digite o valor"
-    />
-  </div>
+          <p><b>Equipamento:</b> {{ solicitacao.descricaoEquipamento }}</p>
+          <p><b>Defeito:</b> {{ solicitacao.descricaoDefeito }}</p>
+          <p><b>Data:</b> {{ solicitacao.dataHoraCriacao | date:'dd/MM/yyyy HH:mm' }}</p>
 
-  <button (click)="registrarOrcamento()">
-    Salvar Orçamento
-  </button>
+          <h3>Dados do Cliente</h3>
 
-</div>
+          <p><b>Nome:</b> {{ solicitacao.cliente?.nome }}</p>
+          <p><b>Email:</b> {{ solicitacao.cliente?.email }}</p>
 
-}
+          <p>
+            <b>Telefone:</b>
+            ({{ solicitacao.cliente?.telefone | slice:0:2 }})
+            {{ solicitacao.cliente?.telefone | slice:2:7 }}-
+            {{ solicitacao.cliente?.telefone | slice:7 }}
+          </p>
+
+        </div>
+
+        <div class="col-direita">
+
+          <app-input
+            altura="52px"
+            largura="100%"
+            titulo="Valor do Orçamento"
+            placeholder="Digite o valor"
+            [valor]="valorDigitado"
+            (mudou)="valorDigitado = $event">
+          </app-input>
+
+          <button (click)="registrarOrcamento()">
+            Salvar Orçamento
+          </button>
+
+        </div>
+
+      </div>
+
+    </app-card-visualizacao>
+
+  }
+
