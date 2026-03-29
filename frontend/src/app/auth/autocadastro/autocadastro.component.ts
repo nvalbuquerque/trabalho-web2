@@ -3,25 +3,25 @@ import { CommonModule } from '@angular/common';
 import { FormControl, FormsModule, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
-import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 import { ValidarCpf } from './validacao-cpf';
 import { InputCardComponent } from '../../shared/input-card/input-card.component';
 import { BotaoAprovarComponent } from '../../shared/botao-aprovar/botao-aprovar.component';
 import { BotaoCancelarComponent } from '../../shared/botao-cancelar/botao-cancelar.component';
+import { InputComponent } from "../../shared/input/input.component";
+import { CardVisualizacaoComponent } from "../../shared/card-visualizacao/card-visualizacao.component";
 
 @Component({
   selector: 'app-autocadastro',
   standalone: true,
-  providers: [provideNgxMask()],
   imports: [
-    CommonModule, 
-    FormsModule, 
-    HttpClientModule, 
-    NgxMaskDirective, 
-    NgxMaskPipe, 
-    InputCardComponent, 
-    BotaoAprovarComponent, 
-    BotaoCancelarComponent
+    CommonModule,
+    FormsModule,
+    HttpClientModule,
+    InputCardComponent,
+    BotaoAprovarComponent,
+    BotaoCancelarComponent,
+    InputComponent,
+    CardVisualizacaoComponent
   ],
   templateUrl: './autocadastro.component.html',
   styleUrls: ['./autocadastro.component.css']
@@ -40,6 +40,30 @@ export class AutocadastroComponent {
   };
 
   constructor(public router: Router, private http: HttpClient) {}
+  
+  aplicarMascaraCPF(valor: string) {
+    let v = valor.replace(/\D/g, ''); // Remove não dígitos [cite: 36]
+    if (v.length > 11) v = v.substring(0, 11);
+    v = v.replace(/(\d{3})(\d)/, '$1.$2');
+    v = v.replace(/(\d{3})(\d)/, '$1.$2');
+    v = v.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+    this.usuario.cpf = v;
+  }
+
+  aplicarMascaraTelefone(valor: string) {
+    let v = valor.replace(/\D/g, ''); // [cite: 36]
+    if (v.length > 11) v = v.substring(0, 11);
+    v = v.replace(/^(\d{2})(\d)/g, '($1) $2');
+    v = v.replace(/(\d{5})(\d)/, '$1-$2');
+    this.usuario.telefone = v;
+  }
+
+  aplicarMascaraCEP(valor: string) {
+    let v = valor.replace(/\D/g, ''); // [cite: 36]
+    if (v.length > 8) v = v.substring(0, 8);
+    v = v.replace(/(\d{5})(\d)/, '$1-$2');
+    this.usuario.cep = v;
+  }
 
   buscarCep() {
     const cepLimpo = this.usuario.cep.replace(/\D/g, '');
@@ -54,7 +78,7 @@ export class AutocadastroComponent {
     }
   }
 
-    onSubmit(form: NgForm) {
+  onSubmit(form: NgForm) {
     const controleCpf = new FormControl(this.usuario.cpf);
     const erroCpf = ValidarCpf()(controleCpf);
 

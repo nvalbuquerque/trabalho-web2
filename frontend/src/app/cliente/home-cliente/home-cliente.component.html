@@ -18,7 +18,6 @@
         <app-input 
           titulo="Busca"
           placeholder="O que você está procurando?" 
-          altura="52px"
           largura="100%"
           (mudou)="onBusca($event)">
         </app-input>
@@ -32,53 +31,32 @@
       </app-botao-aprovar>
     </div>
 
-    <div class="tabela-container mat-elevation-z2">
-      <table mat-table [dataSource]="dadosExibidos">
-        
-        <ng-container matColumnDef="aparelho">
-          <th mat-header-cell *matHeaderCellDef> Aparelho </th>
-          <td mat-cell *matCellDef="let item"> {{ item.descricaoEquipamento }} </td>
-        </ng-container>
+    <app-tabela [dados]="dadosExibidos" [colunas]="colunasTabela">
+      <ng-template #coluna_estadoAtual let-item><span class="status-badge">{{ item.estadoAtual }}</span></ng-template>
+      <ng-template #coluna_valorOrcado let-item>{{ item.valorOrcado | currency:'BRL' }}</ng-template>
+      <ng-template #coluna_acoes let-item>
+        <div class="col-acoes">
+          <span class="id-text">#{{ item.id }}</span>
+          <button class="btn-acao-tabela" *ngIf="item.estadoAtual === 'ORCADA'" (click)="aprovar(item)">Aprovar</button>
+          <button class="btn-acao-tabela" *ngIf="item.estadoAtual === 'REJEITADA'" (click)="resgatar(item)">Resgatar</button>
+          <button class="btn-acao-tabela" *ngIf="item.estadoAtual === 'ARRUMADA'" (click)="pagar(item)">Pagar</button>
+          <a (click)="tratarVisualizacao(item)" class="link-acao">Visualizar</a>
+        </div>
+      </ng-template>
+    </app-tabela>
 
-        <ng-container matColumnDef="situacao">
-          <th mat-header-cell *matHeaderCellDef> Situação Atual </th>
-          <td mat-cell *matCellDef="let item"> 
-            <span class="status-badge">{{ item.estadoAtual }}</span> 
-          </td>
-        </ng-container>
+    <div class="sem-dados" *ngIf="dadosFiltrados.length === 0">
+      <mat-icon>info</mat-icon>
+      <p>Nenhuma solicitação encontrada.</p>
+    </div>
 
-        <ng-container matColumnDef="valor">
-          <th mat-header-cell *matHeaderCellDef> Valor Previsto </th>
-          <td mat-cell *matCellDef="let item"> {{ item.valorOrcado | currency:'BRL' }} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="acoes">
-          <th mat-header-cell *matHeaderCellDef> Ações </th>
-          <td mat-cell *matCellDef="let item">
-            <div class="col-acoes">
-              <span class="id-text">#{{ item.id }}</span>
-              <a (click)="tratarVisualizacao(item)" class="link-acao">Visualizar</a>
-            </div>
-          </td>
-        </ng-container>
-
-        <tr mat-header-row *matHeaderRowDef="colunas"></tr>
-        <tr mat-row *matRowDef="let row; columns: colunas;"></tr>
-      </table>
-
-      <div class="sem-dados" *ngIf="dadosFiltrados.length === 0">
-        <mat-icon>info</mat-icon>
-        <p>Nenhuma solicitação encontrada.</p>
-      </div>
-
-      <div class="footer-custom-paginacao" *ngIf="dadosFiltrados.length > 0">
-        <app-paginacao 
-          [totalItens]="dadosFiltrados.length" 
-          [itensPorPagina]="itensPorPagina" 
-          [paginaAtual]="paginaAtual"
-          (paginaChange)="aoMudarPagina($event)">
-        </app-paginacao>
-      </div>
+    <div class="footer-custom-paginacao" *ngIf="dadosFiltrados.length > 0">
+      <app-paginacao 
+        [totalItens]="dadosFiltrados.length" 
+        [itensPorPagina]="itensPorPagina" 
+        [paginaAtual]="paginaAtual"
+        (paginaChange)="aoMudarPagina($event)">
+      </app-paginacao>
     </div>
   </app-card-visualizacao>
 </div>

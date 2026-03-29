@@ -1,33 +1,30 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterLink } from '@angular/router';
-import { MatButtonModule } from '@angular/material/button';
+import { Router } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
-import { MatTableModule } from '@angular/material/table';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { BotaoAprovarComponent } from '../../shared/botao-aprovar/botao-aprovar.component';
 import { InputComponent } from '../../shared/input/input.component';
 import { PaginacaoComponent } from '../../shared/paginacao/paginacao.component';
+import { CardVisualizacaoComponent } from "../../shared/card-visualizacao/card-visualizacao.component";
+import { TabelaComponent } from "../../shared/tabela/tabela.component";
 import { mockSolicitacao } from '../../mocks/solicitacao.mock';
 import { Solicitacao } from '../../models/solicitacao.model';
 import { SolicitacaoENUM } from '../../models/solicitacaoENUM.model';
-import { CardVisualizacaoComponent } from "../../shared/card-visualizacao/card-visualizacao.component";
 
 @Component({
   selector: 'app-home-cliente',
   standalone: true,
   imports: [
     CommonModule,
-    RouterLink,
-    MatButtonModule,
     MatIconModule,
-    MatTableModule,
     MatSnackBarModule,
     BotaoAprovarComponent,
     InputComponent,
     PaginacaoComponent,
-    CardVisualizacaoComponent
-],
+    CardVisualizacaoComponent,
+    TabelaComponent
+  ],
   templateUrl: './home-cliente.component.html',
   styleUrls: ['./home-cliente.component.css']
 })
@@ -38,12 +35,13 @@ export class HomeClienteComponent implements OnInit {
   dadosExibidos: Solicitacao[] = [];
   idPedidoPendente: string | number = '00000';
   
-  colunas: string[] = [
-    'aparelho', 
-    'situacao', 
-    'valor', 
-    'acoes'
-  ];
+  colunasTabela = [
+  { campo: 'descricaoEquipamento', titulo: 'Aparelho' },
+  { campo: 'estadoAtual', titulo: 'Situação Atual' },
+  { campo: 'valorOrcado', titulo: 'Valor Previsto' },
+  { campo: 'acoes', titulo: 'Ações' }
+];
+
   paginaAtual: number = 1;
   itensPorPagina: number = 5;
 
@@ -66,7 +64,6 @@ export class HomeClienteComponent implements OnInit {
       s.descricaoEquipamento.toLowerCase().includes(termo) || 
       s.estadoAtual.toLowerCase().includes(termo)
     );
-    
     this.paginaAtual = 1;
     this.atualizarPaginacao();
   }
@@ -100,6 +97,10 @@ export class HomeClienteComponent implements OnInit {
       });
     }
   }
+
+  aprovar(item: Solicitacao) { this.router.navigate(['/cliente/mostrar-orcamento', item.id]); }
+  resgatar(item: Solicitacao) { console.log('Resgatar pedido:', item.id); } // RF009 Laura
+  pagar(item: Solicitacao) { this.router.navigate(['/cliente/pagar', item.id]); } // RF010 Laura
 
   irParaSolicitacao(): void {
     this.router.navigate(['/cliente/solicitar-manutencao']);

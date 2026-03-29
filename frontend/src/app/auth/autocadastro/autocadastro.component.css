@@ -6,35 +6,14 @@
   min-height: 100vh;
 }
 
-.cartao-cadastro {
+app-card-visualizacao {
   width: 100%;
   max-width: 800px;
-  background: white;
-  padding: 40px;
-  border-radius: 8px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-  border-top: 5px solid #24808f;
 }
 
 app-input-card {
   display: block;
-  margin-bottom: 30px;
-}
-
-::ng-deep app-input-card input {
-  width: 100% !important;
-  padding: 10px;
-  margin-bottom: 5px; 
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
-}
-
-.acoes-form {
-  margin-top: 30px;
-  display: flex;
-  justify-content: flex-start;
-  gap: 15px;
+  margin-bottom: 20px;
 }
 
 .flex-row {
@@ -44,15 +23,11 @@ app-input-card {
   width: 100%;
 }
 
-.flex-1 { 
-  flex: 1; 
-}
-
 .header-text h1 { 
   font-size: 24px; 
   font-weight: bold; 
   margin-bottom: 5px; 
-
+  color: #24808f;
 }
 
 .divider { 
@@ -61,32 +36,8 @@ app-input-card {
   margin: 20px 0; 
 }
 
-.field-label { 
-  display: block; font-weight: bold; 
-  font-size: 13px; 
-  margin-bottom: 5px; 
-  color: #555; 
-  margin-top: 10px; 
-}
-
-.obrigatorio { 
-  color: red; 
-  margin-left: 2px; 
-}
-
-.msg-erro { 
-  color: #e53935; 
-  font-size: 11px; 
-  display: block; 
-  margin-bottom: 10px; 
-  font-weight: 500; 
-}
-
-.input-readonly { 
-  background-color: #f9f9f9; 
-  color: #888; 
-  cursor: not-allowed; 
-}
+.mt-24 { margin-top: 24px; }
+.justify-between { justify-content: space-between; }
 
 @media (max-width: 600px) {
   .flex-row { 
