@@ -6,7 +6,6 @@ export const mockFuncionario: Funcionario[] = [
       nome: "Maria Silva Pereira",
       cpf: "123.456.789-00",
       email: "maria@empresa.com",
-      senha: "1234",
       dataNascimento: "1998-11-12",
       cargo: "Técnica de Suporte",
       ativo: true
@@ -16,7 +15,6 @@ export const mockFuncionario: Funcionario[] = [
       nome: "Mário da Rocha Bastos",
       cpf: "987.654.321-00",
       email: "mario@empresa.com",
-      senha: "5678",
       dataNascimento: "1980-05-20",
       cargo: "Analista de Sistemas",
       ativo: true

@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
@@ -11,7 +11,6 @@ import { TabelaComponent, AcaoTabela, EventoAcao, ColunaTabela } from "../../sha
 import { mockSolicitacao } from '../../mocks/solicitacao.mock';
 import { Solicitacao } from '../../models/solicitacao.model';
 import { SolicitacaoENUM } from '../../models/solicitacaoENUM.model';
-import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-home-cliente',
@@ -30,9 +29,6 @@ import { AuthService } from '../../services/auth.service';
   styleUrls: ['./home-cliente.component.css']
 })
 export class HomeClienteComponent implements OnInit {
-  private authService = inject(AuthService);
-  private router = inject(Router);
-
   nomeUsuario: string = 'Cliente';
   listaSolicitacoes: Solicitacao[] = mockSolicitacao;
   dadosFiltrados: Solicitacao[] = [];
