@@ -1,20 +1,39 @@
-<div class="modal-overlay" (click)="cancelar()"></div>
+<h2 mat-dialog-title>{{ data.titulo }}</h2>
 
-<div class="modal-box">
+<div mat-dialog-content>
 
-  <mat-dialog-content>
+  <!-- atencao p o any no input, cuidar dele dps -->  
 
-    <h2>{{ data.titulo }}</h2>
-    <p>{{ data.mensagem }}</p>
+  @switch (data.tipo) {
 
-  </mat-dialog-content>
+    @case ('formulario') {
+      <div *ngFor="let campo of data.campos">
+        <app-input-card [label]="campo.label">
+            <input 
+              type="{{campo.tipo || 'text'}}"
+              [value]="formData[campo.campo]"
+              (input)="formData[campo.campo] = $any($event.target).value"
+              style="width: 100%; border: none; background: transparent; padding: 4px;"
+            />
+        </app-input-card>
+      </div>
+    }
 
-  <mat-dialog-actions align="end">
+    @default {
+      <p>{{ data.mensagem }}</p>
+    }
 
-    <div class="modal-actions">
-      <button class="btn-cancelar" (click)="cancelar()">Fechar</button>
-    </div>
-    
-  </mat-dialog-actions>
+  }
+
+</div>
+
+<div mat-dialog-actions>
+  <button mat-raised-button color="primary" (click)="confirmar()">
+    {{ data.textoConfirmar || 'Confirmar' }}
+  </button>
+
+  <button mat-button (click)="cancelar()">
+    {{ data.textoCancelar || 'Cancelar' }}
+  </button>
 
 </div>

@@ -30,26 +30,6 @@
   gap: 20px;
 }
 
-.btn-confirmar { 
-  background-color: #28a745; 
-  color: white; 
-  padding: 12px 12px;
-  border: none;
-  border-radius: 8px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.btn-cancelar { 
-  background-color: #ff0000; 
-  color: white;
-  padding: 12px 24px;
-  border: none;
-  border-radius: 8px;
-  font-weight: bold;
-  cursor: pointer;
- }
-
  .modal-box h2 {
   font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   font-weight: 700;

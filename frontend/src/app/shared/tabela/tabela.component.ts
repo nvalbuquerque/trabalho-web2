@@ -2,11 +2,14 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
+import { TruncatePipe } from '../pipes/truncate.pipe';
+import { CpfPipe } from '../pipes/cpf.pipe';
+import { NomePipe } from '../pipes/nome.pipe';
 
 export interface ColunaTabela {
   campo: string;
   titulo: string;
-  tipo?: 'texto' | 'data' | 'estado' | 'acao';
+  tipo?: 'texto' | 'data' | 'estado' | 'acao' | 'cpf' | 'nome';
   truncar?: number;
 }
 
@@ -25,7 +28,7 @@ export interface EventoAcao {
 @Component({
   selector: 'app-tabela',
   standalone: true,
-  imports: [CommonModule, MatTableModule, MatButtonModule],
+  imports: [CommonModule, MatTableModule, MatButtonModule, TruncatePipe, CpfPipe, NomePipe],
   templateUrl: './tabela.component.html',
   styleUrl: './tabela.component.css'
 })
@@ -36,6 +39,15 @@ export class TabelaComponent {
   @Input() campoEstado: string = 'estadoAtual';
 
   @Output() acaoClicada = new EventEmitter<EventoAcao>();
+
+  @Output() linhaSelecionada = new EventEmitter<any>();
+
+  linhaAtiva: any = null;
+
+  selecionarLinha(item: any) {
+    this.linhaAtiva = item;
+    this.linhaSelecionada.emit(item);
+  }
 
   coresEstado: Record<string, string> = {
     'ABERTA': '#808080',

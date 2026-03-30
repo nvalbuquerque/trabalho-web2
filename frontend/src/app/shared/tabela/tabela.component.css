@@ -47,3 +47,8 @@
     margin-right: 6px;
     border-radius: 8px;
 }
+
+.linha-selecionada {
+  background-color: #e3f2fd;
+  cursor: pointer;
+}

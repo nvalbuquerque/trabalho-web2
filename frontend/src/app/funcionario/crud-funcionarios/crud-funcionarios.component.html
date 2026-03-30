@@ -1,32 +1,58 @@
-<h2>Lista de Funcionários</h2>
+<div class="header">
+  <h2>Lista de funcionários</h2>
 
-<table>
-  <thead>
-    <tr>
-      <th>Id</th>
-      <th>Nome</th>
-      <th>Email</th>
-      <th>Data de nascimento</th>
-      <th>Cargo</th>
+  <div class="header-actions">
+    <app-pesquisa
+      placeholder="Pesquisar..."
+      [valor]="termoPesquisa"
+      (pesquisou)="pesquisar($event)">
+    </app-pesquisa>
 
-    </tr>
-  </thead>
+    <app-botao
+      [texto]="mostrarInativas ? 'Mostrar inativas' : 'Apenas ativas'"
+        icone="visibility"
+        cor="primary" 
+      (clicou)="toggleInativas()">
+    </app-botao>
+  </div>
+</div>
 
-  <tbody>
-    @for (funcionario of funcionarios; track funcionario.id) {
-        <tr>
-            <td>{{ funcionario.id }}</td>
-            <td>{{ funcionario.nome }}</td>
-            <td>{{ funcionario.email }}</td>
-            <td>{{ funcionario.dataNascimento }}</td>
-            <td>{{ funcionario.cargo }}</td>
-        </tr>
-    }
-  </tbody>
-</table>
+<app-tabela
+  [colunas]="colunas"
+  [dados]="dadosPaginados"
+  (linhaSelecionada)="selecionarLinha($event)">
+</app-tabela>
+
+<app-paginacao
+  [totalItens]="categoriasFiltradas.length"
+  [itensPorPagina]="itensPorPagina"
+  [paginaAtual]="paginaAtual"
+  (paginaChange)="selecionarPagina($event)">
+</app-paginacao>
 
 <div class="container-botoes">
-    <button>Adicionar funcionário</button>
-    <button>Atualizar funcionário</button>
-    <button (click)="mensagemExclusao()">Excluir</button>
+  <app-botao
+    texto="Adicionar"
+    icone="add"
+    cor="primary"
+    (clicou)="adicionar()">
+  </app-botao>
+
+  <app-botao
+    texto="Atualizar"
+    icone="edit"
+    cor="accent"
+    (clicou)="atualizar()" 
+    [desabilitado]="!funcionarioSelecionado">
+  </app-botao>
+
+  <app-botao
+    texto="Desativar"
+    icone="delete"
+    cor="warn"
+    (clicou)="excluir()"
+    [desabilitado]="!funcionarioSelecionado">
+    Desativar
+  </app-botao>
+
 </div>
