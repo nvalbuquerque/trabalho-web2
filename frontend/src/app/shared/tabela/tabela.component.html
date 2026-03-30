@@ -1,12 +1,20 @@
 <table mat-table [dataSource]="dados" class="tabela">
     @for (coluna of colunas; track coluna.campo) {
         <ng-container [matColumnDef]="coluna.campo">
+
             <th mat-header-cell *matHeaderCellDef class="tabela__cabecalho">{{ coluna.titulo }}</th>
+            
             <td mat-cell *matCellDef="let item" class="tabela__celula">
 
                 @switch (coluna.tipo) {
+                    @case('cpf') {
+                        {{ getValor(item, coluna.campo) | cpf }}
+                    }
                     @case ('data') {
                         {{ getValor(item, coluna.campo) | date:'dd/MM/yyyy HH:mm' }}
+                    }
+                    @case ('nome') {
+                        {{ getValor(item, coluna.campo) | nome }}
                     }
                     @case ('estado') {
                         <span class="tabela__badge" [style.background-color]="coresEstado[item[campoEstado]]">
@@ -23,19 +31,18 @@
                             </button>
                         }
                     }
-                    @default {
-                        @if (coluna.truncar) {
-                            {{ getValor(item, coluna.campo) | slice:0:coluna.truncar }}
-                        } @else {
-                            {{ getValor(item, coluna.campo) }}
-                        }
+                     @default {
+                        {{ coluna.truncar ? (getValor(item, coluna.campo) | truncate:coluna.truncar) : getValor(item, coluna.campo) }}
                     }
                 }
 
             </td>
         </ng-container>
     }
-
+    
     <tr mat-header-row *matHeaderRowDef="camposExibidos" class="tabela__header"></tr>
-    <tr mat-row *matRowDef="let row; columns: camposExibidos;"></tr>
+    <tr mat-row *matRowDef="let row; columns: camposExibidos;"
+        (click)="selecionarLinha(row)"
+        [class.linha-selecionada]="row === linhaAtiva">
+    </tr>
 </table>
