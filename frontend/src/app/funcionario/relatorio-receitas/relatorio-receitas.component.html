@@ -1,0 +1,86 @@
+<div class="relatorio">
+
+  <app-card-visualizacao>
+    <div class="relatorio__header">
+      <h1 class="relatorio__titulo">Relatório de Receitas por Período</h1>
+      <p class="relatorio__subtitulo">Visualize a receita da empresa agrupada por dia.</p>
+      <hr class="relatorio__divider">
+    </div>
+
+    <div class="relatorio__filtros">
+      <div class="relatorio__filtro_campo">
+        <app-input
+          titulo="Data Início"
+          tipo="date"
+          [valor]="dataInicio"
+          (mudou)="onDataInicioMudou($event)">
+        </app-input>
+      </div>
+
+      <div class="relatorio__filtro_campo">
+        <app-input
+          titulo="Data Fim"
+          tipo="date"
+          [valor]="dataFim"
+          (mudou)="onDataFimMudou($event)">
+        </app-input>
+      </div>
+
+      <div class="relatorio__filtro_acoes">
+        <app-botao
+          texto="Filtrar"
+          icone="filter_list"
+          cor="primary"
+          (clicou)="filtrar()">
+        </app-botao>
+
+        <app-botao
+          texto="Gerar PDF"
+          icone="picture_as_pdf"
+          cor="accent"
+          (clicou)="gerarPdf()">
+        </app-botao>
+      </div>
+    </div>
+
+    <div class="relatorio__cards">
+      <app-card-info
+        tituloInfo="Total Receita"
+        [descricao]="formatarMoeda(totalGeral)"
+        nomeIcon="attach_money">
+      </app-card-info>
+
+      <app-card-info
+        tituloInfo="Serviços Pagos"
+        [descricao]="quantidadeTotal + ' serviços'"
+        nomeIcon="build">
+      </app-card-info>
+    </div>
+
+    <div class="relatorio__tabela">
+      @if (dadosPaginados.length > 0) {
+        <app-tabela
+          [colunas]="colunasTabela"
+          [dados]="dadosPaginados">
+        </app-tabela>
+
+        <div class="relatorio__total_row">
+          <span class="relatorio__total_label">TOTAL</span>
+          <span class="relatorio__total_qtd">{{ quantidadeTotal }}</span>
+          <span class="relatorio__total_valor">{{ formatarMoeda(totalGeral) }}</span>
+        </div>
+
+        <app-paginacao
+          [totalItens]="receitasPorDia.length"
+          [itensPorPagina]="itensPorPagina"
+          [paginaAtual]="paginaAtual"
+          (paginaChange)="onPaginaMudou($event)">
+        </app-paginacao>
+      } @else {
+        <div class="relatorio__sem_dados">
+          <p>Nenhuma receita encontrada para o período selecionado.</p>
+        </div>
+      }
+    </div>
+  </app-card-visualizacao>
+</div>

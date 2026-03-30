@@ -1,0 +1,84 @@
+.relatorio {
+  display: flex;
+  justify-content: center;
+  padding: 20px 20px;
+  background-color: var(--background-white);
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+.relatorio__header {
+  padding: 0 30px;
+}
+
+.relatorio__titulo {
+  font-size: 24px;
+  font-weight: 700;
+  color: #2c3e50;
+  margin-bottom: 8px;
+}
+
+.relatorio__subtitulo {
+  color: var(--gray);
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+.relatorio__divider {
+  border: 0;
+  border-top: 1px solid #e0eaf0;
+  margin-bottom: 25px;
+}
+
+.relatorio__filtros {
+  display: flex;
+  align-items: flex-end;
+  gap: 20px;
+  padding: 0 30px;
+  margin-bottom: 25px;
+  flex-wrap: wrap;
+}
+
+.relatorio__filtro_campo {
+  flex: 0 0 200px;
+}
+
+.relatorio__filtro_acoes {
+  display: flex;
+  gap: 12px;
+}
+
+.relatorio__cards {
+  display: flex;
+  gap: 20px;
+  padding: 0 30px;
+  margin-bottom: 25px;
+}
+
+.relatorio__tabela {
+  padding: 0 30px 20px 30px;
+}
+
+.relatorio__total_row {
+  display: flex;
+  justify-content: space-between;
+  padding: 14px 16px;
+  background-color: var(--light-gray);
+  border-radius: 0 0 8px 8px;
+  font-weight: 700;
+  font-size: 15px;
+  color: #000;
+  max-width: 80%;
+  margin: 0 auto;
+}
+
+.relatorio__total_valor {
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.relatorio__sem_dados {
+  text-align: center;
+  padding: 40px;
+  color: var(--gray);
+  font-size: 15px;
+}
