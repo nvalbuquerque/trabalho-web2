@@ -71,10 +71,6 @@ export class ModalGenericoComponent {
         return;
       }
     }
-
-    console.log('TIPO:', this.data.tipo);
-    console.log('FORMDATA:', this.formData);
-    console.log('CAMPOS:', this.data.campos);
     
     const camposInvalidos = (this.data.campos || []).filter(campo => {
       const valor = this.formData?.[campo.campo];
