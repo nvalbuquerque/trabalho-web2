@@ -12,6 +12,7 @@ import { ModalGenericoComponent, ModalDados } from '../../shared/modal-generico/
 import { mockSolicitacao } from '../../mocks/solicitacao.mock';
 import { AuthService } from '../../services/auth.service';
 import { FuncionarioService } from '../../services/funcionario.service';
+import { CardVisualizacaoComponent } from '../../shared/card-visualizacao/card-visualizacao.component';
 
 @Component({
   selector: 'app-visualizar-solicitacoes',
@@ -21,7 +22,8 @@ import { FuncionarioService } from '../../services/funcionario.service';
     FormsModule,
     TabelaComponent,
     ComboComponent,
-    PaginacaoComponent
+    PaginacaoComponent,
+    CardVisualizacaoComponent
   ],
   templateUrl: './visualizar-solicitacoes.component.html',
   styleUrl: './visualizar-solicitacoes.component.css'
