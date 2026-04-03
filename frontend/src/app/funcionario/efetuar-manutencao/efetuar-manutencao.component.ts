@@ -11,11 +11,16 @@ import { FuncionarioService } from '../../services/funcionario.service';
 import { AuthService } from '../../services/auth.service';
 import { CardVisualizacaoComponent } from '../../shared/card-visualizacao/card-visualizacao.component';
 import { BotaoComponent } from '../../shared/botao/botao.component';
+import { TextAreaComponent } from "../../shared/text-area/text-area.component";
+import { mockFuncionario } from '../../mocks/funcionario.mock';
+import { BotaoAprovarComponent } from '../../shared/botao-aprovar/botao-aprovar.component';
+import { BotaoCancelarComponent } from "../../shared/botao-cancelar/botao-cancelar.component"; 
+
 
 @Component({
   selector: 'app-efetuar-manutencao',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MatSnackBarModule, CardVisualizacaoComponent, BotaoComponent],
+  imports: [CommonModule, ReactiveFormsModule, MatSnackBarModule, CardVisualizacaoComponent, BotaoComponent, TextAreaComponent, BotaoAprovarComponent, BotaoCancelarComponent],
   templateUrl: './efetuar-manutencao.component.html',
   styleUrls: ['./efetuar-manutencao.component.css']
 })
@@ -31,12 +36,23 @@ export class EfetuarManutencaoComponent implements OnInit {
 
   solicitacao?: Solicitacao;
   mostrarFormulario = false;
+  funcionarioLogado = mockFuncionario[1];
+  dataHoraAcesso: Date = new Date();
+  exibirModal: boolean = false;
+
+  estadoModal:
+    | 'confirmacao'
+    | 'sucesso'
+    | 'confirmarRejeicao'
+    | 'motivoRejeicao'
+    | 'sucessoRejeicao' = 'confirmacao';
 
   form = new FormGroup({
     descricao: new FormControl(''),
     orientacoes: new FormControl('')
   });
 
+  
   ngOnInit(): void {
     const id = +this.route.snapshot.params['id'];
     const res = this.solicitacaoService.buscarPorId(id);
@@ -53,8 +69,8 @@ export class EfetuarManutencaoComponent implements OnInit {
     this.mostrarFormulario = true;
   }
 
-  confirmarManutencao(): void {
-    const dados = this.form.value;
+ confirmarManutencao(): void {  
+    const dados = this.form.value;  
 
     if (!dados.descricao || !dados.orientacoes) {
       this.aviso.open('Preencha todos os campos!', 'OK', { duration: 3000, verticalPosition: 'top' });
@@ -81,13 +97,44 @@ export class EfetuarManutencaoComponent implements OnInit {
     this.solicitacao.funcionarioResponsavel = funcionarioLogado;
     this.solicitacaoService.atualizar(this.solicitacao);
 
+    this.form.reset();
+    this.mostrarFormulario = false;
+
     this.aviso.open('Manutenção realizada com sucesso!', 'OK', { duration: 3000, verticalPosition: 'top' });
     this.router.navigate(['/funcionario']);
   }
 
-  redirecionar(): void {
+  redirecionar() {
     if (this.solicitacao) {
-      this.router.navigate(['/funcionario/redirecionar-manutencao', this.solicitacao.id]);
+       this.router.navigate(['/funcionario/redirecionar-manutencao', this.solicitacao.id]);
+    } else {
+      alert('Nenhuma solicitação encontrada para redirecionar!');
+    }
+  }
+
+   aprovarServico(): void {
+    this.estadoModal = 'confirmacao';
+    this.exibirModal = true;
+  }
+
+   fecharModal() {
+    this.exibirModal = false;
+    this.estadoModal = 'confirmacao';
+  }
+
+  obterCorDoBadge(estado: string | undefined): string {
+    if (!estado) return 'badge-cinza'; 
+    switch (estado.toUpperCase()) {
+      case 'APROVADA':
+        return 'badge-amarelo';
+      case 'REDIRECIONADA':
+        return 'badge-roxo';
+      case 'ARRUMADA':
+        return 'badge-azul';
+      default:
+        return 'badge-cinza';
     }
   }
 }
+
+  
