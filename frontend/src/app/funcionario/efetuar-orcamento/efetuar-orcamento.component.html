@@ -20,6 +20,7 @@
 
     <p><b>Equipamento:</b> {{ solicitacao.descricaoEquipamento }}</p>
     <p><b>Defeito:</b> {{ solicitacao.descricaoDefeito }}</p>
+    <p><b>Categoria:</b> {{ solicitacao.categoria?.nome }}</p>
     <p><b>Data:</b> {{ solicitacao.dataHoraCriacao | date:'dd/MM/yyyy HH:mm' }}</p>
     <p><b>Estado Atual:</b> {{ solicitacao.estadoAtual }}</p>
   </div>
@@ -37,6 +38,18 @@
       {{ solicitacao.cliente?.telefone | slice:2:7 }}-
       {{ solicitacao.cliente?.telefone | slice:7 }}
     </p>
+
+  <p class="endereco">
+    <b>Endereço:</b> 
+    {{ solicitacao.cliente?.endereco?.logradouro }},
+    {{ solicitacao.cliente?.endereco?.numero }}
+    <br>
+    {{ solicitacao.cliente?.endereco?.bairro }},
+    {{ solicitacao.cliente?.endereco?.cidade }} - 
+    {{ solicitacao.cliente?.endereco?.uf }}
+    <br>
+    CEP: {{ solicitacao.cliente?.endereco?.cep }}
+  </p>
   </div>
 
   <div class="col col-acao">

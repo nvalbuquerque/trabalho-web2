@@ -112,3 +112,13 @@ input:focus {
     padding-bottom: 20px;
   }
 }
+
+.endereco {
+  display: block !important;
+  line-height: 1.6;
+}
+
+.endereco b {
+  display: block;
+  margin-bottom: 4px;
+}

@@ -12,6 +12,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ModalGenericoComponent, ModalDados } from '../../shared/modal-generico/modal-generico.component';
 import { Router } from '@angular/router';
 import { mockSolicitacao } from '../../mocks/solicitacao.mock';
+import { SolicitacaoService } from '../../services/solicitacao.service';
 
 
 
@@ -34,7 +35,8 @@ export class EfetuarOrcamentoComponent {
     private dialog: MatDialog,
     private authService: AuthService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private solicitacaoService: SolicitacaoService
   ) {}
 
 ngOnInit() {
@@ -44,7 +46,6 @@ ngOnInit() {
   this.nomeFuncionario = this.authService.getNome();
 }
 
-valorOrcado: number = 0;   
 valorDigitado: string = '';   
 valorValido(): boolean {
   const v = parseFloat(this.valorDigitado);
@@ -66,42 +67,35 @@ registrarOrcamento() {
 
   this.valorOrcamento = parseFloat(this.valorDigitado);
 
-if (isNaN(this.valorOrcamento) || this.valorOrcamento <= 0) {
+  if (isNaN(this.valorOrcamento) || this.valorOrcamento <= 0) {
+    const dadosModal: ModalDados = {
+      tipo: 'confirmacao',
+      titulo: 'Valor Inválido',
+      mensagem: 'Digite um valor válido para o orçamento.',
+      textoConfirmar: 'OK'
+    };
+    this.dialog.open(ModalGenericoComponent, { data: dadosModal });
+    return;
+  }
 
-  const dadosModal: ModalDados = {
-    tipo: 'confirmacao',
-    titulo: 'Valor Inválido',
-    mensagem: 'Digite um valor válido para o orçamento.',
-    textoConfirmar: 'OK'
-  };
-
-  this.dialog.open(ModalGenericoComponent, {
-    data: dadosModal
-  });
-
-  return;
-}
-
-  this.solicitacao.valorOrcado = this.valorOrcamento;
-  this.solicitacao.estadoAtual = SolicitacaoENUM.ORCADA;
   this.solicitacao.funcionarioOrcamento = this.authService.getNome();
   this.solicitacao.dataHoraOrcamento = new Date().toISOString();
+  this.solicitacao.valorOrcado = this.valorOrcamento;
+  this.solicitacao.estadoAtual = SolicitacaoENUM.ORCADA;
+
+  this.solicitacaoService.atualizar(this.solicitacao);
 
   const dialogRef = this.dialog.open(ModalGenericoComponent, {
     data: {
       tipo: 'confirmacao',
       titulo: 'Orçamento Registrado',
-      mensagem: `Funcionário: ${this.solicitacao.funcionarioOrcamento}     Data/Hora: ${this.formatarData(new Date(this.solicitacao.dataHoraOrcamento))}`,
+      mensagem: `Funcionário: ${this.solicitacao?.funcionarioOrcamento} - Data/Hora: ${this.formatarData(new Date(this.solicitacao!.dataHoraOrcamento!))}`,
       textoConfirmar: 'OK'
-    } as ModalDados
-  });
-
-  dialogRef.afterClosed().subscribe((result: boolean) => {
-    if (result) {
-      this.router.navigate(['/funcionario']);
     }
   });
+
+  dialogRef.afterClosed().subscribe(() => {
+    this.router.navigate(['/funcionario']);
+  });
 }
 }
-
-

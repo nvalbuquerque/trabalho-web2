@@ -13,6 +13,7 @@ import { mockSolicitacao } from '../../mocks/solicitacao.mock';
 import { AuthService } from '../../services/auth.service';
 import { FuncionarioService } from '../../services/funcionario.service';
 import { CardVisualizacaoComponent } from '../../shared/card-visualizacao/card-visualizacao.component';
+import { SolicitacaoService } from '../../services/solicitacao.service';
 
 @Component({
   selector: 'app-visualizar-solicitacoes',
@@ -34,7 +35,8 @@ constructor(
   private router: Router,
   private authService: AuthService,
   private dialog: MatDialog,
-  private funcionarioService: FuncionarioService
+  private funcionarioService: FuncionarioService,
+  private solicitacaoService: SolicitacaoService
 ) {}
 
   opcoesFiltro: OpcaoCombo[] = [
@@ -97,13 +99,33 @@ constructor(
       });
 
       dialogRef.afterClosed().subscribe(confirmado => {
-        if (confirmado) {
-          item.estadoAtual = 'FINALIZADA';
-          item.dataHoraFinalizacao = new Date().toISOString();
-          item.funcionarioResponsavel = this.authService.getNome();
-        }
+    if (confirmado && item) {
+      const funcionarioLogado = this.funcionarioService.buscarPorEmail(this.authService.getEmail());
+
+      item.estadoAtual = 'FINALIZADA';
+      item.dataHoraFinalizacao = new Date().toISOString();
+      
+      item.funcionarioResponsavel = {
+        id: funcionarioLogado?.id,
+        nome: this.authService.getNome()
+      };
+
+      if (!item.historico) {
+        item.historico = [];
+      }
+      item.historico.push({
+        dataHora: new Date().toISOString(),
+        estado: 'FINALIZADA',
+        usuario: this.authService.getNome(),
+        descricao: 'Solicitação finalizada pelo funcionário.'
       });
-      break;
+
+      this.solicitacaoService.atualizar(item);
+
+      this.aplicarFiltros();
+    }
+  });
+  break;
   }
 }
   onFiltroChange(valor: string | number) {
