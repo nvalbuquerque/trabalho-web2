@@ -96,7 +96,6 @@ export class EfetuarManutencaoComponent implements OnInit {
     this.solicitacao.descricaoManutencao = dados.descricao;
     this.solicitacao.orientacoesCliente = dados.orientacoes;
     this.solicitacao.funcionarioResponsavel = funcionarioLogado;
-    this.solicitacao.dataHoraCriacao = new Date().toISOString();
     this.solicitacaoService.atualizar(this.solicitacao);
 
     this.form.reset();
