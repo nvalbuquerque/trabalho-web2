@@ -1,7 +1,7 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { FormGroup, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
+import { Component, OnInit, inject } from '@angular/core';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { Solicitacao } from '../../models/solicitacao.model';
 import { SolicitacaoENUM } from '../../models/solicitacaoENUM.model';
@@ -12,7 +12,6 @@ import { AuthService } from '../../services/auth.service';
 import { CardVisualizacaoComponent } from '../../shared/card-visualizacao/card-visualizacao.component';
 import { BotaoComponent } from '../../shared/botao/botao.component';
 import { TextAreaComponent } from "../../shared/text-area/text-area.component";
-import { mockFuncionario } from '../../mocks/funcionario.mock';
 import { BotaoAprovarComponent } from '../../shared/botao-aprovar/botao-aprovar.component';
 import { BotaoCancelarComponent } from "../../shared/botao-cancelar/botao-cancelar.component"; 
 
@@ -24,6 +23,7 @@ import { BotaoCancelarComponent } from "../../shared/botao-cancelar/botao-cancel
   templateUrl: './efetuar-manutencao.component.html',
   styleUrls: ['./efetuar-manutencao.component.css']
 })
+
 export class EfetuarManutencaoComponent implements OnInit {
 
   private solicitacaoService = inject(SolicitacaoService);
@@ -36,9 +36,10 @@ export class EfetuarManutencaoComponent implements OnInit {
 
   solicitacao?: Solicitacao;
   mostrarFormulario = false;
-  funcionarioLogado = mockFuncionario[1];
   dataHoraAcesso: Date = new Date();
   exibirModal: boolean = false;
+  botaoDesativado: boolean = false;
+  exibirToastSucesso: boolean = false;
 
   estadoModal:
     | 'confirmacao'
@@ -48,11 +49,10 @@ export class EfetuarManutencaoComponent implements OnInit {
     | 'sucessoRejeicao' = 'confirmacao';
 
   form = new FormGroup({
-    descricao: new FormControl(''),
-    orientacoes: new FormControl('')
+    descricao: new FormControl('', [Validators.required]),
+    orientacoes: new FormControl('', [Validators.required])
   });
 
-  
   ngOnInit(): void {
     const id = +this.route.snapshot.params['id'];
     const res = this.solicitacaoService.buscarPorId(id);
@@ -65,7 +65,8 @@ export class EfetuarManutencaoComponent implements OnInit {
     }
   }
 
-  abrirFormulario(): void {
+  abrirFormulario() {
+    if(this.botaoDesativado) return;
     this.mostrarFormulario = true;
   }
 
@@ -95,16 +96,23 @@ export class EfetuarManutencaoComponent implements OnInit {
     this.solicitacao.descricaoManutencao = dados.descricao;
     this.solicitacao.orientacoesCliente = dados.orientacoes;
     this.solicitacao.funcionarioResponsavel = funcionarioLogado;
+    this.solicitacao.dataHoraCriacao = new Date().toISOString();
     this.solicitacaoService.atualizar(this.solicitacao);
 
     this.form.reset();
+    this.exibirModal = false;
+    this.estadoModal = 'confirmacao';
     this.mostrarFormulario = false;
+    this.exibirToastSucesso = true;
 
-    this.aviso.open('Manutenção realizada com sucesso!', 'OK', { duration: 3000, verticalPosition: 'top' });
-    this.router.navigate(['/funcionario']);
+    setTimeout(() => { 
+        this.exibirToastSucesso = false;
+        this.router.navigate(['/funcionario/visualizar-solicitacoes']);
+      }, 2500);
   }
 
   redirecionar() {
+    if(this.botaoDesativado) return;
     if (this.solicitacao) {
        this.router.navigate(['/funcionario/redirecionar-manutencao', this.solicitacao.id]);
     } else {
@@ -112,14 +120,30 @@ export class EfetuarManutencaoComponent implements OnInit {
     }
   }
 
+   fecharModal() {
+    this.exibirModal = false;
+    this.estadoModal = 'confirmacao';
+    
+    if (!this.exibirToastSucesso) {
+      this.botaoDesativado = false;
+    }
+  }
+
    aprovarServico(): void {
+    if(this.form.invalid) {
+     this.aviso.open('Preencha todos os campos obrigatórios antes de aprovar.', 'OK', { duration: 3000 });
+     return;
+    }
+
+  if(this.botaoDesativado) return;
     this.estadoModal = 'confirmacao';
     this.exibirModal = true;
   }
 
-   fecharModal() {
-    this.exibirModal = false;
-    this.estadoModal = 'confirmacao';
+  cancelarFormulario() {
+    this.mostrarFormulario = false;
+      this.form.reset();
+      this.botaoDesativado = false;
   }
 
   obterCorDoBadge(estado: string | undefined): string {
@@ -136,5 +160,3 @@ export class EfetuarManutencaoComponent implements OnInit {
     }
   }
 }
-
-  

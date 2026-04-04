@@ -8,9 +8,10 @@
     <div class="timestamp-acesso"> Manutenção realizada em: {{ dataHoraAcesso | date: 'dd/MM/yyyy HH:mm' }} </div>
     <p class="status-badge" id="p1" [ngClass]="obterCorDoBadge (solicitacao.estadoAtual) "> <strong>Status:</strong> {{ solicitacao.estadoAtual }}</p>
     <p><strong>ID:</strong> # {{ solicitacao.id }}</p>
+    <p><strong>Categoria:</strong> {{ solicitacao.categoria?.nome }}</p>
     <p><strong>Equipamento:</strong> {{ solicitacao.descricaoEquipamento }}</p>
     <p><strong>Defeito:</strong> {{ solicitacao.descricaoDefeito }}</p>
-    <p><strong>Data de entrada:</strong> {{ solicitacao.dataHoraCriacao }}</p>
+    <p><strong>Data de entrada:</strong> {{ solicitacao.dataHoraCriacao | date: 'dd/MM/yyyy HH:mm' }}</p>
     </div>
 
     <div class="card">
@@ -30,12 +31,15 @@
 @if (!mostrarFormulario) {
 <div class="botoes">
   <app-botao id="botao1"
+    *ngIf="!botaoDesativado"
     texto="Efetuar Manutenção" 
     (clicou)="abrirFormulario()"
     cor="primary">
   </app-botao>
+
   
   <app-botao id="botao2"
+    *ngIf="!botaoDesativado"
     texto="Redirecionar" 
     (clicou)="redirecionar()"
     cor="warn">
@@ -56,7 +60,7 @@
         </app-text-area>
     </div>
 
-      <div class="campo-container2">
+     <div class="campo-container2">
      <app-text-area altura="200px" largura="100%"
         titulo="Orientações para o Cliente:"
         placeholder="Digite algo..."
@@ -65,11 +69,20 @@
         </app-text-area>
     </div>
 
+    <div class="botao-acoes">
+       <app-botao class="botao-voltar"
+       *ngIf="!botaoDesativado"
+        texto="Voltar" 
+        (clicou)="cancelarFormulario()" 
+        cor="warn"> 
+      </app-botao>
+
     <app-botao class="botao-confirmar"
         texto="Confirmar" 
         (clicou)="aprovarServico()" 
         cor="accent">
     </app-botao>
+      </div>
 
     <div class="modal-overlay" *ngIf="exibirModal">
     <div class="modal-box">
@@ -77,13 +90,23 @@
       <h2>Confirmar Manutenção?</h2>
       <p id="paragrafo1">Ao confirmar, a manutenção será registrada.</p>
       <div class="modal-actions">
-        <app-botao-cancelar class="btn-cancelar" (click)="fecharModal()">Cancelar</app-botao-cancelar>
-        <app-botao-aprovar class="btn-confirmar" (click)="confirmarManutencao()">Confirmar</app-botao-aprovar> 
+        <app-botao-cancelar 
+        class="btn-cancelar" 
+        (click)="fecharModal()">Cancelar</app-botao-cancelar>
+
+        <app-botao-aprovar 
+        class="btn-confirmar" 
+        (click)="confirmarManutencao()">Confirmar</app-botao-aprovar> 
        </div>
       </div>
     </div>
    </div>
+
  </form>
   }
 </app-card-visualizacao>
 
+<div class="toast-sucesso" *ngIf="exibirToastSucesso">
+  <span class="icon-check">✓</span> Manutenção registrada com sucesso! <br>
+  Redirecionando...
+</div>
