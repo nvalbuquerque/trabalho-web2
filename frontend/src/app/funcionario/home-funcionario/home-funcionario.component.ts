@@ -1,100 +1,78 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Solicitacao } from '../../models/solicitacao.model';
 import { SolicitacaoENUM } from '../../models/solicitacaoENUM.model';
 import { Router } from '@angular/router';
 import { CardVisualizacaoComponent } from '../../shared/card-visualizacao/card-visualizacao.component';
-import { BotaoComponent } from '../../shared/botao/botao.component';
+import { TabelaComponent, ColunaTabela, AcaoTabela } from '../../shared/tabela/tabela.component';
+import { PaginacaoComponent } from '../../shared/paginacao/paginacao.component';
+import { SolicitacaoService } from '../../services/solicitacao.service';
+import { AuthService } from '../../services/auth.service';
+
 
 @Component({
   selector: 'app-home-funcionario',
   standalone: true,
-  imports: [CommonModule, CardVisualizacaoComponent, BotaoComponent],
+  imports: [CommonModule, CardVisualizacaoComponent, TabelaComponent, PaginacaoComponent],
   templateUrl: './home-funcionario.component.html',
   styleUrl: './home-funcionario.component.css'
 })
-export class HomeFuncionarioComponent {
-solicitacoes: Solicitacao[] = [
-  {
-    id: 1,
-    dataHoraCriacao: '2026-03-03T10:30:00',
-    descricaoEquipamento: 'Notebook Dell',
-    descricaoDefeito: 'Não está carregando',
-    estadoAtual: SolicitacaoENUM.ABERTA,
-    cliente: {
-      cpf: '11111111111',
-      nome: 'Daniela',
-      email: 'daniela@email.com',
-      telefone: '41999999999'
+export class HomeFuncionarioComponent implements OnInit {
+
+  private solicitacaoService = inject(SolicitacaoService);
+  private authService = inject(AuthService);
+  private router = inject(Router);
+
+  nomeFuncionario: string = '';
+  solicitacoesAbertas: Solicitacao[] = [];
+
+  colunas: ColunaTabela[] = [
+    { campo: 'dataHoraCriacao', titulo: 'Data/Hora da Solicitação', tipo: 'data' },
+    { campo: 'cliente.nome', titulo: 'Cliente', tipo: 'nome' },
+    { campo: 'descricaoEquipamento', titulo: 'Descrição do Produto', truncar: 30 },
+    { campo: 'acao', titulo: '-', tipo: 'acao' }
+  ];
+
+  acoes: AcaoTabela[] = [
+    {
+      nome: 'Efetuar Orçamento',
+      acao: 'orcamento',
+      cor: 'primary',
+      estados: [SolicitacaoENUM.ABERTA]
     }
-  },
-  {
-    id: 2,
-    dataHoraCriacao: '2026-02-06T11:10:00',
-    descricaoEquipamento: 'Impressora HP',
-    descricaoDefeito: 'Travando papel constantemente e imprimindo com cores erradas',
-    estadoAtual: SolicitacaoENUM.ABERTA,
-    cliente: {
-      cpf: '22222222222',
-      nome: 'Laura',
-      email: 'laura@email.com',
-      telefone: '41988888888'
-    }
-  },
-  {
-    id: 3,
-    dataHoraCriacao: '2026-03-01T12:00:00',
-    descricaoEquipamento: 'Computador',
-    descricaoDefeito: 'Muito lento',
-    estadoAtual: SolicitacaoENUM.ABERTA,
-    cliente: {
-      cpf: '33333333333',
-      nome: 'Jess',
-      email: 'jess@email.com',
-      telefone: '41977777777'
-    }
-  },
-  {
-    id: 4,
-    dataHoraCriacao: '2026-03-06T13:20:00',
-    descricaoEquipamento: '1234567890123456789012345678901234567890',
-    descricaoDefeito: 'Tela danificada',
-    estadoAtual: SolicitacaoENUM.FINALIZADA,
-    cliente: {
-      cpf: '44444444444',
-      nome: 'Nathalia',
-      email: 'nath@email.com',
-      telefone: '41966666666'
-    }
-  },
-  {
-    id: 5,
-    dataHoraCriacao: '2026-03-06T13:20:00',
-    descricaoEquipamento: '1234567890123456789012345678901234567890',
-    descricaoDefeito: 'Tela trincada',
-    estadoAtual: SolicitacaoENUM.ABERTA,
-    cliente: {
-      cpf: '55555555555',
-      nome: 'Felipe',
-      email: 'felipe@email.com',
-      telefone: '41955555555'
+  ];
+
+  paginaAtual = 1;
+  itensPorPagina = 5;
+
+  ngOnInit(): void {
+    this.nomeFuncionario = this.authService.getNome();
+    this.carregarSolicitacoes();
+  }
+
+  private carregarSolicitacoes(): void {
+    this.solicitacoesAbertas = this.solicitacaoService.listarTodos()
+      .filter(s => s.estadoAtual === SolicitacaoENUM.ABERTA)
+      .sort((a, b) => new Date(a.dataHoraCriacao).getTime() - new Date(b.dataHoraCriacao).getTime());
+  }
+
+  get dadosPaginados() {
+    const inicio = (this.paginaAtual - 1) * this.itensPorPagina;
+    const fim = inicio + this.itensPorPagina;
+    return this.solicitacoesAbertas.slice(inicio, fim);
+  }
+
+  onAcaoTabela(evento: any) {
+    if (evento.acao === 'orcamento') {
+      this.efetuarOrcamento(evento.item.id);
     }
   }
-];
 
-get solicitacoesAbertas() {
-  return this.solicitacoes.filter(
-    s => s.estadoAtual === SolicitacaoENUM.ABERTA
-  );
+  efetuarOrcamento(id?: number) {
+    this.router.navigate(['/funcionario/efetuar-orcamento', id]);
+  }
+
+  onPaginaMudou(pagina: any) {
+    this.paginaAtual = Number(pagina);
+  }
 }
-
-constructor(private router: Router) {}
-
-efetuarOrcamento(id?: number) {
-  this.router.navigate(['/funcionario/efetuar-orcamento', id]);
-}
-
-
-}
-
-
