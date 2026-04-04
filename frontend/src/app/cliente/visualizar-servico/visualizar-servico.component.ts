@@ -9,6 +9,7 @@ import { BotaoComponent } from '../../shared/botao/botao.component';
 import { BotaoAprovarComponent } from '../../shared/botao-aprovar/botao-aprovar.component';
 import { BotaoCancelarComponent } from '../../shared/botao-cancelar/botao-cancelar.component';
 import { SolicitacaoService } from '../../services/solicitacao.service';
+import { HistoricoService } from '../../services/historico.service';
 import { SolicitacaoENUM } from '../../models/solicitacaoENUM.model';
 
 @Component({
@@ -29,6 +30,7 @@ export class VisualizarServicoComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private solicitacaoService = inject(SolicitacaoService);
+  private historicoService = inject(HistoricoService);
 
   solicitacao: Solicitacao | undefined;
   historicoOrdenado: HistoricoSolicitacao[] = [];
@@ -40,10 +42,8 @@ export class VisualizarServicoComponent implements OnInit {
     const id = Number(idParam);
     this.solicitacao = this.solicitacaoService.buscarPorId(id);
 
-    if (this.solicitacao?.historico) {
-      this.historicoOrdenado = [...this.solicitacao.historico].sort(
-        (a, b) => new Date(a.dataHora).getTime() - new Date(b.dataHora).getTime()
-      );
+    if (this.solicitacao) {
+      this.historicoOrdenado = this.historicoService.listarPorSolicitacao(this.solicitacao.id!);
     }
   }
 
@@ -99,29 +99,18 @@ export class VisualizarServicoComponent implements OnInit {
   resgatarServico(): void {
     if (!this.solicitacao) return;
 
-    const agora = new Date();
-    const dataFormatada = agora.toISOString().slice(0, 16).replace('T', ' ');
-
-    const novoHistorico: HistoricoSolicitacao = {
-      id: new Date().getTime(),
-      solicitacaoId: this.solicitacao.id!,
+    this.historicoService.inserir({
+      dataHora: new Date().toISOString(),
       estadoAnterior: SolicitacaoENUM.REJEITADA,
       estadoNovo: SolicitacaoENUM.APROVADA,
-      dataHora: dataFormatada,
-      observacao: 'Serviço resgatado pelo cliente.',
-    };
+      solicitacaoId: this.solicitacao.id!,
+      observacao: 'Serviço resgatado pelo cliente.'
+    });
 
-    if (!this.solicitacao.historico) {
-      this.solicitacao.historico = [];
-    }
-    this.solicitacao.historico.push(novoHistorico);
     this.solicitacao.estadoAtual = SolicitacaoENUM.APROVADA;
-
     this.solicitacaoService.atualizar(this.solicitacao);
 
-    this.historicoOrdenado = [...this.solicitacao.historico].sort(
-      (a, b) => new Date(a.dataHora).getTime() - new Date(b.dataHora).getTime()
-    );
+    this.historicoOrdenado = this.historicoService.listarPorSolicitacao(this.solicitacao.id!);
   }
 
   obterTextoBotaoAcao(): string {

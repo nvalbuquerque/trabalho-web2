@@ -19,8 +19,15 @@
           </div>
           <div class="visualizar__info_box">
             <p class="visualizar__info_destaque">{{ solicitacao.cliente?.nome }}</p>
+            <p class="visualizar__info_sub">CPF: {{ solicitacao.cliente?.cpf }}</p>
             <p class="visualizar__info_sub">{{ solicitacao.cliente?.telefone }}</p>
             <p class="visualizar__info_sub">{{ solicitacao.cliente?.email }}</p>
+            <p class="visualizar__info_sub" *ngIf="solicitacao.cliente?.endereco">
+              {{ solicitacao.cliente?.endereco?.logradouro }}, {{ solicitacao.cliente?.endereco?.numero }}
+              <span *ngIf="solicitacao.cliente?.endereco?.complemento"> - {{ solicitacao.cliente?.endereco?.complemento }}</span>
+              - {{ solicitacao.cliente?.endereco?.bairro }},
+              {{ solicitacao.cliente?.endereco?.cidade }}/{{ solicitacao.cliente?.endereco?.uf }}
+            </p>
           </div>
         </div>
 
@@ -53,7 +60,7 @@
             <h2>DATA DE ABERTURA</h2>
           </div>
           <div class="visualizar__info_box">
-            <p class="visualizar__info_destaque">{{ solicitacao.dataHoraCriacao }}</p>
+            <p class="visualizar__info_destaque">{{ solicitacao.dataHoraCriacao | date:'dd/MM/yyyy HH:mm' }}</p>
           </div>
         </div>
       </div>
@@ -147,7 +154,7 @@
               </span>
               <span class="visualizar__timeline_data">
                 <mat-icon class="visualizar__timeline_icone_pequeno">schedule</mat-icon>
-                {{ item.dataHora }}
+                {{ item.dataHora | date:'dd/MM/yyyy HH:mm' }}
               </span>
             </div>
 

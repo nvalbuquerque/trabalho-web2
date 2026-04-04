@@ -60,7 +60,7 @@ export class HomeClienteComponent implements OnInit {
   paginaAtual: number = 1;
   itensPorPagina: number = 5;
 
-  constructor(public router: Router) {}
+  constructor(public router: Router, private aviso: MatSnackBar) {}
 
   ngOnInit(): void {
     this.carregarDadosIniciais();
