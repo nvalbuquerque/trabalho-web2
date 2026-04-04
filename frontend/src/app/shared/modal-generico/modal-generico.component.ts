@@ -7,12 +7,15 @@ import { InputCardComponent } from '../input-card/input-card.component';
 import { cpfValidator } from '../validators/cpf.validator';
 import { FormControl } from '@angular/forms';
 import { EmailValidator } from '../validators/email.validator';
+import { MatIconModule } from '@angular/material/icon';
 
 export interface CampoFormulario {
   label: string;
   campo: string;
   tipo?: 'text' | 'number' | 'select';
   obrigatorio?: boolean;
+  senha?: string;
+  readonly?: boolean;
 }
 
 export interface ModalDados{
@@ -34,6 +37,7 @@ export interface ModalDados{
     MatButtonModule,
     FormsModule,
     InputCardComponent,
+    MatIconModule
   ],
   templateUrl: './modal-generico.component.html',
   styleUrl: './modal-generico.component.css'
@@ -41,6 +45,8 @@ export interface ModalDados{
 
 export class ModalGenericoComponent {
   formData: any = {};
+  isCpfReadonly: boolean = false;
+  mostrarSenha: { [key: string]: boolean } = {};
 
   constructor(
     public dialogRef: MatDialogRef<ModalGenericoComponent>,
@@ -48,21 +54,28 @@ export class ModalGenericoComponent {
   ) {
     if (this.data.tipo === 'formulario') {
       this.formData = { ...this.data.formData };
-      }
+      this.isCpfReadonly = this.data.campos?.some(
+        c => c.campo === 'cpf' && c.readonly
+      ) || false;
+    }
     }
 
    confirmar() {
     if (this.data.tipo === 'formulario') {
 
-      if (this.formData.cpf) {
-      const control = new FormControl(this.formData.cpf);
+    if (this.formData.cpf && !this.isCpfReadonly) {
+      const cpfLimpo = this.formData.cpf.replace(/\D/g, '');
+
+      const control = new FormControl(cpfLimpo);
       const erro = cpfValidator(control);
 
       if (erro) {
         alert('CPF inválido!');
         return;
       }
-      }
+
+      this.formData.cpf = cpfLimpo;
+    }
 
     if (this.formData.email) {
       const emailControl = new FormControl(this.formData.email);

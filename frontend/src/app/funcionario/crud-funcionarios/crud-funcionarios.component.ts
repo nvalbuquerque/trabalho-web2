@@ -110,7 +110,7 @@ export class CrudFuncionariosComponent implements OnInit {
           { label: 'Email', campo: 'email', tipo: 'text', obrigatorio: true },
           { label: 'Data de Nascimento', campo: 'dataNascimento', tipo: 'date', obrigatorio: true },
           { label: 'Cargo', campo: 'cargo', tipo: 'text', obrigatorio: true },
-          { label: 'Senha', campo: 'senha', tipo: 'text', obrigatorio: true }
+          { senha: true, label: 'Senha', campo: 'senha', tipo: 'password', obrigatorio: true }
         ],
         formData: {
           nome: '',
@@ -128,8 +128,31 @@ export class CrudFuncionariosComponent implements OnInit {
         const emailEmFuncionario = this.funcionarioService.buscarPorEmail(result.email);
         const emailEmCliente = this.clienteService.buscarPorEmail(result.email);
         if (emailEmFuncionario || emailEmCliente) {
-          this.aviso.open('E-mail já cadastrado no sistema!', 'OK', { duration: 3000, verticalPosition: 'top' });
+          this.aviso.open('E-mail já cadastrado no sistema. Realize nova tentativa.', 'OK', { duration: 3000, verticalPosition: 'top' });
           return;
+        }
+
+        const cpfEmFuncionario = this.funcionarioService.buscarPorCpf(result.cpf);
+        const cpfEmCliente = this.clienteService.buscarPorCpf(result.cpf);
+
+        if (cpfEmFuncionario || cpfEmCliente) {
+          this.aviso.open('CPF já cadastrado no sistema. Realize nova tentativa.', 'OK', { duration: 3000, verticalPosition: 'top' });
+          return;
+        }
+
+        if (result.senha.length < 4) {
+          this.aviso.open('A senha deve conter no mínimo 4 caracteres. Realize nova tentativa.', 'OK', { duration: 3000, verticalPosition: 'top' });
+          return;
+        }
+
+        if (result.dataNascimento) {
+          const dataNascimento = new Date(result.dataNascimento);
+          const hoje = new Date();
+          const idade = hoje.getFullYear() - dataNascimento.getFullYear();
+          if (idade < 18) {
+            this.aviso.open('O funcionário deve ser maior de idade. Realize nova tentativa.', 'OK', { duration: 3000, verticalPosition: 'top' });
+            return;
+          }
         }
 
         const novo: Funcionario = {
@@ -152,7 +175,7 @@ export class CrudFuncionariosComponent implements OnInit {
         campos: [
           { label: 'Nome', campo: 'nome', tipo: 'text' },
           { label: 'Email', campo: 'email', tipo: 'text' },
-          { label: 'CPF', campo: 'cpf', tipo: 'text' },
+          { label: 'CPF', campo: 'cpf', tipo: 'text', readonly: true },
           { label: 'Data de Nascimento', campo: 'dataNascimento', tipo: 'date' },
           { label: 'Cargo', campo: 'cargo', tipo: 'text' }
         ],
@@ -166,7 +189,20 @@ export class CrudFuncionariosComponent implements OnInit {
           const emailEmFuncionario = this.funcionarioService.buscarPorEmail(result.email);
           const emailEmCliente = this.clienteService.buscarPorEmail(result.email);
           if (emailEmFuncionario || emailEmCliente) {
-            this.aviso.open('E-mail já cadastrado no sistema!', 'OK', { duration: 3000, verticalPosition: 'top' });
+            this.aviso.open('E-mail já cadastrado no sistema. Realize nova tentativa.', 'OK', { 
+              duration: 3000, 
+              verticalPosition: 'top' 
+            });
+            return;
+          }
+        }
+
+        if (result.dataNascimento) {
+          const dataNascimento = new Date(result.dataNascimento);
+          const hoje = new Date();
+          const idade = hoje.getFullYear() - dataNascimento.getFullYear();
+          if (idade < 18) {
+            this.aviso.open('O funcionário deve ser maior de idade. Realize nova tentativa.', 'OK', { duration: 3000, verticalPosition: 'top' });
             return;
           }
         }

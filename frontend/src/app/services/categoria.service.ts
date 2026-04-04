@@ -21,7 +21,7 @@ export class CategoriaService {
   }
 
   listarAtivas(): CategoriaEquipamento[] {
-    return this.listarTodos().filter(c => c.estadoAtual === 'ATIVA');
+    return this.listarTodos().filter(c => c.ativo === true);
   }
 
   buscarPorId(id: number): CategoriaEquipamento | undefined {
@@ -31,7 +31,10 @@ export class CategoriaService {
 
   inserir(categoria: CategoriaEquipamento): void {
     const categorias = this.listarTodos();
-    categoria.id = new Date().getTime();
+    const maiorId = categorias.length > 0
+    ? Math.max(...categorias.map(c => c.id || 0))
+    : 0;
+    categoria.id = maiorId + 1;
     categorias.push(categoria);
     localStorage[LS_CHAVE] = JSON.stringify(categorias);
   }
@@ -50,7 +53,7 @@ export class CategoriaService {
     const categorias = this.listarTodos();
     const categoria = categorias.find(c => c.id === id);
     if (categoria) {
-      categoria.estadoAtual = 'INATIVA';
+      categoria.ativo = false;
       localStorage[LS_CHAVE] = JSON.stringify(categorias);
     }
   }

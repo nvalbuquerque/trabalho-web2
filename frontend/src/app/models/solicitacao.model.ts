@@ -26,7 +26,7 @@ export interface Solicitacao {
   ativo?: boolean;
 
   cliente?: Cliente;
-  categoria?: CategoriaEquipamento;
+  categoria: CategoriaEquipamento;
   funcionarioResponsavel?: Funcionario;
 
   historico?: HistoricoSolicitacao[];

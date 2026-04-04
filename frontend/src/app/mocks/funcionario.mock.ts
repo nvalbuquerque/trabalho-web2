@@ -30,7 +30,7 @@ export const mockFuncionario: Funcionario[] = [
     senha: "123456",
     dataNascimento: "1990-03-15",
     cargo: "Atendente",
-    ativo: true
+    ativo: false
   },
 
   {
@@ -41,7 +41,7 @@ export const mockFuncionario: Funcionario[] = [
     senha: "123456",
     dataNascimento: "1985-07-22",
     cargo: "Técnico de Suporte",
-    ativo: false
+    ativo: true
   }
 
 

@@ -27,7 +27,11 @@ export class SolicitacaoService {
 
   inserir(solicitacao: Solicitacao): void {
     const solicitacoes = this.listarTodos();
-    solicitacao.id = new Date().getTime();
+    const maiorId = solicitacoes.length > 0
+    ? Math.max(...solicitacoes.map(s => s.id || 0))
+    : 0;
+
+    solicitacao.id = maiorId + 1;
     solicitacoes.push(solicitacao);
     localStorage[LS_CHAVE] = JSON.stringify(solicitacoes);
   }
