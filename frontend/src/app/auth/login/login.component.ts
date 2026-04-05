@@ -8,19 +8,20 @@ import { BotaoAprovarComponent } from '../../shared/botao-aprovar/botao-aprovar.
 import { CardVisualizacaoComponent } from "../../shared/card-visualizacao/card-visualizacao.component";
 import { InputCardComponent } from "../../shared/input-card/input-card.component";
 import { AuthService } from '../../services/auth.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-login',
   standalone: true,
   imports: [
     CommonModule,
+    FormsModule,
     MatCardModule,
     MatSnackBarModule,
-    InputComponent,
     BotaoAprovarComponent,
     CardVisualizacaoComponent,
     InputCardComponent
-],
+  ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
