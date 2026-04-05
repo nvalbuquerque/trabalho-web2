@@ -10,7 +10,6 @@ import { MatButtonModule } from '@angular/material/button';
   styleUrl: './botao-cancelar.component.css'
 })
 export class BotaoCancelarComponent {
-   @Input() confirmacao: boolean = false;
    @Output() clicou = new EventEmitter<void>();
 
   click() {

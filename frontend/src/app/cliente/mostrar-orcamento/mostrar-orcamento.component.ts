@@ -2,7 +2,6 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { mockSolicitacao } from '../../mocks/solicitacao.mock';
 import { Solicitacao } from '../../models/solicitacao.model';
 import { Funcionario } from '../../models/funcionario.model';
 import { Cliente } from '../../models/cliente.model';
