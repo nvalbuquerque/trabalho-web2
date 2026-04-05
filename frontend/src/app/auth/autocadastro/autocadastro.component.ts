@@ -12,6 +12,7 @@ import { InputComponent } from "../../shared/input/input.component";
 import { CardVisualizacaoComponent } from "../../shared/card-visualizacao/card-visualizacao.component";
 import { ModalGenericoComponent } from "../../shared/modal-generico/modal-generico.component";
 import { ClienteService } from '../../services/cliente.service';
+import { FuncionarioService } from '../../services/funcionario.service';
 
 @Component({
   selector: 'app-autocadastro',
@@ -49,44 +50,33 @@ export class AutocadastroComponent {
   exibirModal = false;
   camposTocados: any = {};
   private clienteService = inject(ClienteService);
+  private funcionarioService = inject(FuncionarioService);
   private dialog = inject(MatDialog);
 
   constructor(public router: Router, private http: HttpClient) {}
   
   aplicarMascaraCPF(valor: string) {
-    let v = valor.replace(/\D/g, ''); 
+    let v = valor.replace(/\D/g, '');
     if (v.length > 11) v = v.substring(0, 11);
     v = v.replace(/(\d{3})(\d)/, '$1.$2');
     v = v.replace(/(\d{3})(\d)/, '$1.$2');
     v = v.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
     this.usuario.cpf = v;
-    this.usuario.cpf = valor; 
-      setTimeout(() => {
-        this.usuario.cpf = v;
-      });
   }
 
   aplicarMascaraTelefone(valor: string) {
-    let v = valor.replace(/\D/g, ''); 
+    let v = valor.replace(/\D/g, '');
     if (v.length > 11) v = v.substring(0, 11);
     v = v.replace(/^(\d{2})(\d)/g, '($1) $2');
     v = v.replace(/(\d{5})(\d)/, '$1-$2');
     this.usuario.telefone = v;
-    this.usuario.telefone = valor;
-    setTimeout(() => {
-      this.usuario.telefone = v;
-    });
   }
 
   aplicarMascaraCEP(valor: string) {
-    let v = valor.replace(/\D/g, ''); 
+    let v = valor.replace(/\D/g, '');
     if (v.length > 8) v = v.substring(0, 8);
     v = v.replace(/(\d{5})(\d)/, '$1-$2');
     this.usuario.cep = v;
-    this.usuario.cep = valor;
-    setTimeout(() => {
-      this.usuario.cep = v;
-    });
   }
 
   buscarCep() {
@@ -107,40 +97,32 @@ export class AutocadastroComponent {
     return Math.floor(1000 + Math.random() * 9000).toString();
   }
 
-  private verificarSeRegistroExiste(resultado: any): boolean {
-    if (resultado === null || resultado === undefined || resultado === false || resultado === '') return false;
-    if (typeof resultado === 'number') return resultado !== -1;
-    if (Array.isArray(resultado)) return resultado.length > 0;
-    if (typeof resultado === 'object') return Object.keys(resultado).length > 0;
-    return true;
-  }
-
   onSubmit(form: NgForm) {
+    if (!this.usuario.nome || !this.usuario.cpf || !this.usuario.email ||
+        !this.usuario.telefone || !this.usuario.cep) {
+      alert('Preencha todos os campos obrigatórios!');
+      return;
+    }
+
     const controleCpf = new FormControl(this.usuario.cpf);
     const erroCpf = ValidarCpf()(controleCpf);
 
-    if (form.valid && erroCpf === null) {
-      
-      if (!this.usuario.email || this.usuario.email.trim() === '') {
-        alert('O campo E-mail é obrigatório!');
-        return;
-      }
+    if (erroCpf !== null) {
+      alert('CPF Inválido!');
+      return;
+    }
 
-      const emailEmCliente = this.clienteService.buscarPorEmail(this.usuario.email);
-      const existeEmCliente = this.verificarSeRegistroExiste(emailEmCliente);
+    if (this.clienteService.buscarPorEmail(this.usuario.email) ||
+        this.funcionarioService.buscarPorEmail(this.usuario.email)) {
+      alert('E-mail já cadastrado no sistema!');
+      return;
+    }
 
-      if (existeEmCliente) {
-        alert('E-mail já cadastrado no sistema!');
-        return;
-      }
-
-      const cpfLimpo = this.usuario.cpf.replace(/\D/g, '');
-      const cpfExiste = this.clienteService.listarTodos().find(c => c.cpf.replace(/\D/g, '') === cpfLimpo);
-      
-      if (cpfExiste) {
-        alert('CPF já cadastrado!');
-        return;
-      }
+    const cpfLimpo = this.usuario.cpf.replace(/\D/g, '');
+    if (this.clienteService.listarTodos().find(c => c.cpf.replace(/\D/g, '') === cpfLimpo)) {
+      alert('CPF já cadastrado!');
+      return;
+    }
 
       this.usuario.senha = this.gerarSenhaAleatoria();
       this.clienteService.inserir({
@@ -170,10 +152,5 @@ export class AutocadastroComponent {
       dialogRef.afterClosed().subscribe(() => {
         this.router.navigate(['/login']);
       });
-      
-    } else {
-      const mensagem = erroCpf ? 'CPF Inválido!' : 'Preencha todos os campos obrigatórios!';
-      alert(mensagem);
-    }
   }
 }
