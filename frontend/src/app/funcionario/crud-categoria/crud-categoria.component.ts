@@ -8,6 +8,7 @@ import { ModalGenericoComponent } from '../../shared/modal-generico/modal-generi
 import { BotaoComponent } from '../../shared/botao/botao.component';
 import { PaginacaoComponent } from '../../shared/paginacao/paginacao.component';
 import { PesquisaComponent } from '../../shared/pesquisa/pesquisa.component';
+import { mockSolicitacao } from '../../mocks/solicitacao.mock';
 
 @Component({
   selector: 'app-crud-categoria',
@@ -46,8 +47,22 @@ export class CrudCategoriaComponent implements OnInit {
     this.carregarDados();
   }
 
+  private calcularQuantidadePorCategoria(): void {
+  this.dados = this.dados.map(categoria => {
+    const quantidade = mockSolicitacao.filter(
+      s => s.categoria.id === categoria.id
+    ).length;
+
+    return {
+      ...categoria,
+      quantidade
+    };
+  });
+}
+
   private carregarDados(): void {
     this.dados = this.categoriaService.listarTodos();
+    this.calcularQuantidadePorCategoria();
   }
 
   selecionarPagina(pagina: number): void {
@@ -65,8 +80,8 @@ export class CrudCategoriaComponent implements OnInit {
       c.nome.toLowerCase().includes(this.termoPesquisa.toLowerCase())
     );
 
-    if (this.mostrarInativas) {
-      filtradas = filtradas.filter(c => c.estadoAtual === 'ATIVA');
+    if (!this.mostrarInativas) {
+      filtradas = filtradas.filter(c => c.ativo === true);
     }
 
     return filtradas;
@@ -91,12 +106,10 @@ export class CrudCategoriaComponent implements OnInit {
         tipo: 'formulario',
         titulo: 'Adicionar Categoria',
         campos: [
-          { label: 'Nome', campo: 'nome', tipo: 'text', obrigatorio: true },
-          { label: 'Quantidade', campo: 'quantidade', tipo: 'number', obrigatorio: true }
+          { label: 'Nome', campo: 'nome', tipo: 'text', obrigatorio: true }
         ],
         formData: {
           nome: '',
-          quantidade: 0
         }
       }
     });
@@ -105,7 +118,7 @@ export class CrudCategoriaComponent implements OnInit {
       if (result) {
         const nova: CategoriaEquipamento = {
           ...result,
-          estadoAtual: 'ATIVA'
+          ativo: true
         };
         this.categoriaService.inserir(nova);
         this.carregarDados();
@@ -122,7 +135,6 @@ export class CrudCategoriaComponent implements OnInit {
         titulo: 'Editar Categoria',
         campos: [
           { label: 'Nome', campo: 'nome', tipo: 'text' },
-          { label: 'Quantidade', campo: 'quantidade', tipo: 'number' }
         ],
         formData: { ...this.categoriaSelecionada }
       }
@@ -133,7 +145,7 @@ export class CrudCategoriaComponent implements OnInit {
         const atualizada: CategoriaEquipamento = {
           ...this.categoriaSelecionada,
           ...result,
-          estadoAtual: 'ATIVA'
+          ativo: true
         };
         this.categoriaService.atualizar(atualizada);
         this.carregarDados();

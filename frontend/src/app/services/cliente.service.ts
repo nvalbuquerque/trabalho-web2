@@ -30,6 +30,13 @@ export class ClienteService {
     return clientes.find(c => c.email === email);
   }
 
+  buscarPorCpf(cpf: string): Cliente | undefined {
+    const cpfLimpo = cpf.replace(/\D/g, '');
+    return this.listarTodos().find(c =>
+      c.cpf.replace(/\D/g, '') === cpfLimpo
+    );
+  }
+
   inserir(cliente: Cliente): void {
     const clientes = this.listarTodos();
     cliente.id = new Date().getTime();

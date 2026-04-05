@@ -75,6 +75,11 @@ export class SolicitarManutencaoComponent implements OnInit {
     const emailLogado = this.authService.getEmail();
     const clienteLogado = this.clienteService.buscarPorEmail(emailLogado);
     const categoriaSelecionada = this.categoriaService.buscarPorId(Number(this.solicitacao.categoriaId));
+    
+    if (!categoriaSelecionada) {
+      this.aviso.open('Categoria inválida.', 'OK', { duration: 3000 });
+      return;
+    }
 
     const novaSolicitacao: Solicitacao = {
       descricaoEquipamento: this.solicitacao.modelo,

@@ -30,9 +30,19 @@ export class FuncionarioService {
     return funcionarios.find(f => f.email === email);
   }
 
+  buscarPorCpf(cpf: string): Funcionario | undefined {
+    const cpfLimpo = cpf.replace(/\D/g, '');
+    return this.listarTodos().find(f =>
+      f.cpf.replace(/\D/g, '') === cpfLimpo
+    );
+  }
+
   inserir(funcionario: Funcionario): void {
     const funcionarios = this.listarTodos();
-    funcionario.id = new Date().getTime();
+    const maiorId = funcionarios.length > 0
+    ? Math.max(...funcionarios.map(f => f.id || 0))
+    : 0;
+    funcionario.id = maiorId + 1;
     funcionarios.push(funcionario);
     localStorage[LS_CHAVE] = JSON.stringify(funcionarios);
   }

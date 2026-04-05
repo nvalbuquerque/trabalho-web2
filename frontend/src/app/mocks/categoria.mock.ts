@@ -1,66 +1,49 @@
 import { CategoriaEquipamento } from '../models/categoria.model';
 
 export const mockCategoria: CategoriaEquipamento[] = [
-    {
-        id: 1,
-        nome: "Laptop",
-        estadoAtual: 'ATIVA',
-        quantidade: 10,
-   },
-
-    {
-        id: 2,
-        nome: "Ultrabook",
-        estadoAtual: 'ATIVA',
-        quantidade: 5,
-    },
-
-    {
-        id: 3,
-        nome: "Desktop torre",
-        estadoAtual: 'ATIVA',
-        quantidade: 12,
-  },
-
-  {     
-        id: 4,
-        nome: "All-in-One",
-        estadoAtual: 'ATIVA',
-        quantidade: 2,
-  },
-
-   {
-        id: 5,
-        nome: "Impressora jato de tinta",
-        estadoAtual: 'ATIVA',
-        quantidade: 5,
-  },
-
   {
-        id: 6,
-        nome: "Impressora Laser",
-        estadoAtual: 'ATIVA',
-        quantidade: 8,
+    id: 1,
+    nome: "Notebook",
+    ativo: true,
   },
-
-   {
-        id: 7,
-        nome: "Monitor LED",
-        estadoAtual: 'ATIVA',
-        quantidade: 2,
-  },
-
   {
-        id: 8,
-        nome: "Mouse sem fio",
-        estadoAtual: 'INATIVA',
-        quantidade: 0,
+    id: 2,
+    nome: "Desktop",
+    ativo: true,
   },
-
   {
-        id: 9,
-        nome: "Teclado mecânico",
-        estadoAtual: 'INATIVA',
-        quantidade: 0,
+    id: 3,
+    nome: "Monitor",
+    ativo: true,
+  },
+  {
+    id: 4,
+    nome: "Mouse",
+    ativo: true,
+  },
+  {
+    id: 5,
+    nome: "Impressora",
+    ativo: true,
+  },
+  {
+    id: 6,
+    nome: "Dispositivo Móvel",
+    ativo: true,
+  },
+  {
+    id: 7,
+    nome: "Áudio e Vídeo",
+    ativo: true,
+  },
+  {
+    id: 8,
+    nome: "Rede",
+    ativo: false,
+  },
+  {
+    id: 9,
+    nome: "Teclado",
+    ativo: true,
   }
 ];
