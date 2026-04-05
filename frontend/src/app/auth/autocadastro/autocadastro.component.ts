@@ -3,12 +3,14 @@ import { CommonModule } from '@angular/common';
 import { FormControl, FormsModule, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ValidarCpf } from './validacao-cpf';
 import { InputCardComponent } from '../../shared/input-card/input-card.component';
 import { BotaoAprovarComponent } from '../../shared/botao-aprovar/botao-aprovar.component';
 import { BotaoCancelarComponent } from '../../shared/botao-cancelar/botao-cancelar.component';
 import { InputComponent } from "../../shared/input/input.component";
 import { CardVisualizacaoComponent } from "../../shared/card-visualizacao/card-visualizacao.component";
+import { ModalGenericoComponent } from "../../shared/modal-generico/modal-generico.component";
 import { ClienteService } from '../../services/cliente.service';
 import { FuncionarioService } from '../../services/funcionario.service';
 
@@ -19,6 +21,7 @@ import { FuncionarioService } from '../../services/funcionario.service';
     CommonModule,
     FormsModule,
     HttpClientModule,
+    MatDialogModule,
     InputCardComponent,
     BotaoAprovarComponent,
     BotaoCancelarComponent,
@@ -38,16 +41,22 @@ export class AutocadastroComponent {
     logradouro: '',
     bairro: '',
     cidade: '',
+    uf: '',
+    numero: '',
+    complemento: '',
     senha: ''
   };
 
+  exibirModal = false;
+  camposTocados: any = {};
   private clienteService = inject(ClienteService);
   private funcionarioService = inject(FuncionarioService);
+  private dialog = inject(MatDialog);
 
   constructor(public router: Router, private http: HttpClient) {}
   
   aplicarMascaraCPF(valor: string) {
-    let v = valor.replace(/\D/g, ''); // Remove não dígitos [cite: 36]
+    let v = valor.replace(/\D/g, '');
     if (v.length > 11) v = v.substring(0, 11);
     v = v.replace(/(\d{3})(\d)/, '$1.$2');
     v = v.replace(/(\d{3})(\d)/, '$1.$2');
@@ -56,7 +65,7 @@ export class AutocadastroComponent {
   }
 
   aplicarMascaraTelefone(valor: string) {
-    let v = valor.replace(/\D/g, ''); // [cite: 36]
+    let v = valor.replace(/\D/g, '');
     if (v.length > 11) v = v.substring(0, 11);
     v = v.replace(/^(\d{2})(\d)/g, '($1) $2');
     v = v.replace(/(\d{5})(\d)/, '$1-$2');
@@ -64,7 +73,7 @@ export class AutocadastroComponent {
   }
 
   aplicarMascaraCEP(valor: string) {
-    let v = valor.replace(/\D/g, ''); // [cite: 36]
+    let v = valor.replace(/\D/g, '');
     if (v.length > 8) v = v.substring(0, 8);
     v = v.replace(/(\d{5})(\d)/, '$1-$2');
     this.usuario.cep = v;
@@ -78,30 +87,44 @@ export class AutocadastroComponent {
           this.usuario.logradouro = dados.logradouro;
           this.usuario.bairro = dados.bairro;
           this.usuario.cidade = dados.localidade;
+          this.usuario.uf = dados.uf;
         }
       });
     }
   }
 
+  gerarSenhaAleatoria(): string {
+    return Math.floor(1000 + Math.random() * 9000).toString();
+  }
+
   onSubmit(form: NgForm) {
+    if (!this.usuario.nome || !this.usuario.cpf || !this.usuario.email ||
+        !this.usuario.telefone || !this.usuario.cep) {
+      alert('Preencha todos os campos obrigatórios!');
+      return;
+    }
+
     const controleCpf = new FormControl(this.usuario.cpf);
     const erroCpf = ValidarCpf()(controleCpf);
 
-    if (form.valid && erroCpf === null) {
-      const emailEmCliente = this.clienteService.buscarPorEmail(this.usuario.email);
-      const emailEmFuncionario = this.funcionarioService.buscarPorEmail(this.usuario.email);
-      if (emailEmCliente || emailEmFuncionario) {
-        alert('E-mail já cadastrado no sistema!');
-        return;
-      }
+    if (erroCpf !== null) {
+      alert('CPF Inválido!');
+      return;
+    }
 
-      const cpfLimpo = this.usuario.cpf.replace(/\D/g, '');
-      const cpfExiste = this.clienteService.listarTodos().find(c => c.cpf.replace(/\D/g, '') === cpfLimpo);
-      if (cpfExiste) {
-        alert('CPF já cadastrado!');
-        return;
-      }
+    if (this.clienteService.buscarPorEmail(this.usuario.email) ||
+        this.funcionarioService.buscarPorEmail(this.usuario.email)) {
+      alert('E-mail já cadastrado no sistema!');
+      return;
+    }
 
+    const cpfLimpo = this.usuario.cpf.replace(/\D/g, '');
+    if (this.clienteService.listarTodos().find(c => c.cpf.replace(/\D/g, '') === cpfLimpo)) {
+      alert('CPF já cadastrado!');
+      return;
+    }
+
+      this.usuario.senha = this.gerarSenhaAleatoria();
       this.clienteService.inserir({
         nome: this.usuario.nome,
         cpf: this.usuario.cpf,
@@ -113,14 +136,21 @@ export class AutocadastroComponent {
           logradouro: this.usuario.logradouro,
           bairro: this.usuario.bairro,
           cidade: this.usuario.cidade,
-          uf: '',
-          numero: ''
+          uf: this.usuario.uf,
+          numero: this.usuario.numero,
+          complemento: this.usuario.complemento
         }
       });
-      this.router.navigate(['/login']);
-    } else {
-      const mensagem = erroCpf ? 'CPF Inválido!' : 'Preencha todos os campos obrigatórios!';
-      alert(mensagem);
-    }
+      const dialogRef = this.dialog.open(ModalGenericoComponent, {
+        width: '400px',
+        data: {
+          titulo: 'Cadastro Concluído',
+          mensagem: `Seu cadastro foi realizado com sucesso! Sua senha de acesso gerada é: ${this.usuario.senha}`
+        }
+      });
+
+      dialogRef.afterClosed().subscribe(() => {
+        this.router.navigate(['/login']);
+      });
   }
 }
