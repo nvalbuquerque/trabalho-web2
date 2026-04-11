@@ -4,10 +4,11 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "tb_categoria")
+@Table(name = "categorias")
 public class CategoriaEquipamento {
 
     @Id
