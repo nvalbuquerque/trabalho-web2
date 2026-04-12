@@ -63,3 +63,9 @@ app-card-visualizacao {
   z-index: 10;
   pointer-events: none;
 }
+
+.acoes-login {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
