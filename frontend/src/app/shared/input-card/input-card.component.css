@@ -46,7 +46,11 @@
   font-family: inherit; 
 }
 
-
 :host input:not([type="checkbox"]):not([type="radio"]) {
   height: 40px; 
+}
+
+.asterisco {
+  color: #e53935;
+  margin-left: 2px;
 }
