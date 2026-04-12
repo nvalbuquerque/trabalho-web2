@@ -1,6 +1,7 @@
 package com.web.equipe5.manutencaoequipamentos.repository;
 
-import com.web.equipe5.manutencaoequipamentos.entity.Solicitacao;
+import com.web.equipe5.manutencaoequipamentos.model.Solicitacao;
+
 import com.web.equipe5.manutencaoequipamentos.enums.EstadoSolicitacao;
 import org.springframework.data.jpa.repository.JpaRepository;
 
