@@ -45,12 +45,6 @@ onBlur(event: FocusEvent) {
   const input = event.target as HTMLInputElement;
   const valor = input.value ?? '';
 
-  console.log('--- BLUR ---');
-  console.log('valor:', valor);
-  console.log('obrigatorio:', this.obrigatorio);
-  console.log('email:', this.email);
-  console.log('textoNum:', this.textoNum);
-
   if (this.obrigatorio && !valor.trim()) {
     this.mostrarAviso('Campo obrigatório');
     return;
