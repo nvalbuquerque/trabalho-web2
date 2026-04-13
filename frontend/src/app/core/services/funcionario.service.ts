@@ -1,15 +1,17 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Funcionario } from '../models/funcionario.model';
 import { mockFuncionario } from '../mocks/funcionario.mock';
+import { IFuncionarioService } from '../interfaces/funcionario.service.interface';
 
 const LS_CHAVE = "funcionarios";
 
 @Injectable({
   providedIn: 'root'
 })
-export class FuncionarioService {
+export class FuncionarioService implements IFuncionarioService {
 
-  constructor() {
+  constructor(private http: HttpClient) {
     if (!localStorage[LS_CHAVE]) {
       localStorage[LS_CHAVE] = JSON.stringify(mockFuncionario);
     }
@@ -39,9 +41,7 @@ export class FuncionarioService {
 
   inserir(funcionario: Funcionario): void {
     const funcionarios = this.listarTodos();
-    const maiorId = funcionarios.length > 0
-    ? Math.max(...funcionarios.map(f => f.id || 0))
-    : 0;
+    const maiorId = funcionarios.length > 0 ? Math.max(...funcionarios.map(f => f.id || 0)) : 0;
     funcionario.id = maiorId + 1;
     funcionarios.push(funcionario);
     localStorage[LS_CHAVE] = JSON.stringify(funcionarios);

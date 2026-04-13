@@ -11,8 +11,8 @@ import { BotaoCancelarComponent } from '../../shared/botao-cancelar/botao-cancel
 import { InputComponent } from "../../shared/input/input.component";
 import { CardVisualizacaoComponent } from "../../shared/card-visualizacao/card-visualizacao.component";
 import { ModalGenericoComponent } from "../../shared/modal-generico/modal-generico.component";
-import { ClienteService } from '../../services/cliente.service';
-import { FuncionarioService } from '../../services/funcionario.service';
+import { ClienteService } from '../../core/services/cliente.service';
+import { FuncionarioService } from '../../core/services/funcionario.service';
 
 @Component({
   selector: 'app-autocadastro',
@@ -62,6 +62,10 @@ export class AutocadastroComponent {
     v = v.replace(/(\d{3})(\d)/, '$1.$2');
     v = v.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
     this.usuario.cpf = v;
+    this.usuario.cpf = valor; 
+      setTimeout(() => {
+        this.usuario.cpf = v;
+      });
   }
 
   aplicarMascaraTelefone(valor: string) {
@@ -70,13 +74,20 @@ export class AutocadastroComponent {
     v = v.replace(/^(\d{2})(\d)/g, '($1) $2');
     v = v.replace(/(\d{5})(\d)/, '$1-$2');
     this.usuario.telefone = v;
+    this.usuario.telefone = valor;
+      setTimeout(() => {
+        this.usuario.telefone = v;
+      });
   }
-
   aplicarMascaraCEP(valor: string) {
     let v = valor.replace(/\D/g, '');
     if (v.length > 8) v = v.substring(0, 8);
     v = v.replace(/(\d{5})(\d)/, '$1-$2');
     this.usuario.cep = v;
+    this.usuario.cep = valor;
+    setTimeout(() => {
+      this.usuario.cep = v;
+    });
   }
 
   buscarCep() {

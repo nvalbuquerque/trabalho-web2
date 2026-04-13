@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { HttpClient, HttpResponse } from '@angular/common/http';
+import { ISolicitacaoService } from '../interfaces/solicitacao.service.interface';
 import { Solicitacao } from '../models/solicitacao.model';
 import { mockSolicitacao } from '../mocks/solicitacao.mock';
 
@@ -7,9 +9,9 @@ const LS_CHAVE = "solicitacoes";
 @Injectable({
   providedIn: 'root'
 })
-export class SolicitacaoService {
+export class SolicitacaoService implements ISolicitacaoService {
 
-  constructor() {
+  constructor(private http: HttpClient) {
     if (!localStorage[LS_CHAVE]) {
       localStorage[LS_CHAVE] = JSON.stringify(mockSolicitacao);
     }
@@ -46,9 +48,12 @@ export class SolicitacaoService {
     localStorage[LS_CHAVE] = JSON.stringify(solicitacoes);
   }
 
-  remover(id: number): void {
-    let solicitacoes = this.listarTodos();
-    solicitacoes = solicitacoes.filter(s => s.id !== id);
-    localStorage[LS_CHAVE] = JSON.stringify(solicitacoes);
+ remover(id: number): void {
+    const solicitacoes = this.listarTodos();
+    const solicitacao = solicitacoes.find(s => s.id === id);
+    if (solicitacao) {
+      solicitacao.ativo = false;
+      localStorage[LS_CHAVE] = JSON.stringify(solicitacoes);
+    }
   }
 }

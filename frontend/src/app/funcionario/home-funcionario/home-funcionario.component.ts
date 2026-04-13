@@ -1,13 +1,13 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Solicitacao } from '../../models/solicitacao.model';
-import { SolicitacaoENUM } from '../../models/solicitacaoENUM.model';
+import { Solicitacao } from '../../core/models/solicitacao.model';
+import { SolicitacaoENUM } from '../../core/models/solicitacaoENUM.model';
 import { Router } from '@angular/router';
 import { CardVisualizacaoComponent } from '../../shared/card-visualizacao/card-visualizacao.component';
 import { TabelaComponent, ColunaTabela, AcaoTabela } from '../../shared/tabela/tabela.component';
 import { PaginacaoComponent } from '../../shared/paginacao/paginacao.component';
-import { SolicitacaoService } from '../../services/solicitacao.service';
-import { AuthService } from '../../services/auth.service';
+import { SolicitacaoService } from '../../core/services/solicitacao.service';
+import { AuthService } from '../../core/services/auth.service';
 
 
 @Component({

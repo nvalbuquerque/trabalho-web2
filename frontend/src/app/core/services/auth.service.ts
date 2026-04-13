@@ -1,7 +1,9 @@
 import { Injectable, inject } from '@angular/core';
 import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 import { ClienteService } from './cliente.service';
 import { FuncionarioService } from './funcionario.service';
+import { IAuthService } from '../interfaces/auth.service.interface';
 
 const LS_USUARIO = "usuarioSessao";
 const LS_PERFIL = "usuarioPerfil";
@@ -10,21 +12,19 @@ const LS_EMAIL = "usuarioEmail";
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService {
+export class AuthService implements IAuthService {
 
   private clienteService = inject(ClienteService);
   private funcionarioService = inject(FuncionarioService);
   private router = inject(Router);
+  private http = inject(HttpClient);
 
   validarLogin(email: string, senha: string): { sucesso: boolean, mensagem: string } {
-    // Busca em clientes e em funcionários
     const cliente = this.clienteService.buscarPorEmail(email);
     const funcionario = this.funcionarioService.buscarPorEmail(email);
 
     if (cliente) {
-      if (cliente.ativo === false) {
-        return { sucesso: false, mensagem: 'Usuário desativado.' };
-      }
+      if (cliente.ativo === false) return { sucesso: false, mensagem: 'Usuário desativado.' };
       if (cliente.senha === senha) {
         this.salvarSessao(cliente.nome, email, 'cliente');
         return { sucesso: true, mensagem: '' };
@@ -33,9 +33,7 @@ export class AuthService {
     }
 
     if (funcionario) {
-      if (funcionario.ativo === false) {
-        return { sucesso: false, mensagem: 'Usuário desativado.' };
-      }
+      if (funcionario.ativo === false) return { sucesso: false, mensagem: 'Usuário desativado.' };
       if (funcionario.senha === senha) {
         this.salvarSessao(funcionario.nome, email, 'funcionario');
         return { sucesso: true, mensagem: '' };

@@ -69,3 +69,25 @@ app-card-visualizacao {
   justify-content: center;
   margin-top: 20px;
 }
+
+.link-cadastro {
+  text-align: center;
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid #eee;
+}
+
+.link-cadastro p {
+  color: #666;
+  font-size: 14px;
+}
+
+.link-cadastro a {
+  color: #24808f;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.link-cadastro a:hover {
+  text-decoration: underline;
+}

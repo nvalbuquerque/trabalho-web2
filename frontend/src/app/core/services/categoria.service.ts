@@ -1,15 +1,17 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { CategoriaEquipamento } from '../models/categoria.model';
 import { mockCategoria } from '../mocks/categoria.mock';
+import { ICategoriaService } from '../interfaces/categoria.service.interface';
 
 const LS_CHAVE = "categorias";
 
 @Injectable({
   providedIn: 'root'
 })
-export class CategoriaService {
+export class CategoriaService implements ICategoriaService {
 
-  constructor() {
+  constructor(private http: HttpClient) {
     if (!localStorage[LS_CHAVE]) {
       localStorage[LS_CHAVE] = JSON.stringify(mockCategoria);
     }
@@ -31,9 +33,7 @@ export class CategoriaService {
 
   inserir(categoria: CategoriaEquipamento): void {
     const categorias = this.listarTodos();
-    const maiorId = categorias.length > 0
-    ? Math.max(...categorias.map(c => c.id || 0))
-    : 0;
+    const maiorId = categorias.length > 0 ? Math.max(...categorias.map(c => c.id || 0)) : 0;
     categoria.id = maiorId + 1;
     categorias.push(categoria);
     localStorage[LS_CHAVE] = JSON.stringify(categorias);

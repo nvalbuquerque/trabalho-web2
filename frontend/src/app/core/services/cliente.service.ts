@@ -1,15 +1,17 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Cliente } from '../models/cliente.model';
 import { mockCliente } from '../mocks/clientes.mock';
+import { IClienteService } from '../interfaces/cliente.service.interface';
 
 const LS_CHAVE = "clientes";
 
 @Injectable({
   providedIn: 'root'
 })
-export class ClienteService {
+export class ClienteService implements IClienteService {
 
-  constructor() {
+  constructor(private http: HttpClient) {
     if (!localStorage[LS_CHAVE]) {
       localStorage[LS_CHAVE] = JSON.stringify(mockCliente);
     }
@@ -54,9 +56,16 @@ export class ClienteService {
     localStorage[LS_CHAVE] = JSON.stringify(clientes);
   }
 
+  listarAtivos(): Cliente[] {
+    return this.listarTodos().filter(c => c.ativo === true);
+  }
+
   remover(id: number): void {
-    let clientes = this.listarTodos();
-    clientes = clientes.filter(c => c.id !== id);
-    localStorage[LS_CHAVE] = JSON.stringify(clientes);
+    const clientes = this.listarTodos();
+    const cliente = clientes.find(c => c.id === id);
+    if (cliente) {
+      cliente.ativo = false;
+      localStorage[LS_CHAVE] = JSON.stringify(clientes);
+    }
   }
 }

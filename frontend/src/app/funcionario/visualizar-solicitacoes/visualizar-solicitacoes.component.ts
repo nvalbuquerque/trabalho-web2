@@ -9,12 +9,12 @@ import { ComboComponent, OpcaoCombo } from '../../shared/combo/combo.component';
 import { PaginacaoComponent } from '../../shared/paginacao/paginacao.component';
 import { ModalGenericoComponent, ModalDados } from '../../shared/modal-generico/modal-generico.component';
 import { CardVisualizacaoComponent } from '../../shared/card-visualizacao/card-visualizacao.component';
-import { Solicitacao } from '../../models/solicitacao.model';
-import { SolicitacaoENUM } from '../../models/solicitacaoENUM.model';
-import { SolicitacaoService } from '../../services/solicitacao.service';
-import { HistoricoService } from '../../services/historico.service';
-import { AuthService } from '../../services/auth.service';
-import { FuncionarioService } from '../../services/funcionario.service';
+import { Solicitacao } from '../../core/models/solicitacao.model';
+import { SolicitacaoENUM } from '../../core/models/solicitacaoENUM.model';
+import { SolicitacaoService } from '../../core/services/solicitacao.service';
+import { HistoricoService } from '../../core/services/historico.service';
+import { AuthService } from '../../core/services/auth.service';
+import { FuncionarioService } from '../../core/services/funcionario.service';
 
 @Component({
   selector: 'app-visualizar-solicitacoes',

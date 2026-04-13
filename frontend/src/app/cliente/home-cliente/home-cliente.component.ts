@@ -8,11 +8,11 @@ import { InputComponent } from '../../shared/input/input.component';
 import { PaginacaoComponent } from '../../shared/paginacao/paginacao.component';
 import { CardVisualizacaoComponent } from "../../shared/card-visualizacao/card-visualizacao.component";
 import { TabelaComponent, AcaoTabela, EventoAcao, ColunaTabela } from "../../shared/tabela/tabela.component";
-import { Solicitacao } from '../../models/solicitacao.model';
-import { SolicitacaoENUM } from '../../models/solicitacaoENUM.model';
-import { SolicitacaoService } from '../../services/solicitacao.service';
-import { HistoricoService } from '../../services/historico.service';
-import { AuthService } from '../../services/auth.service';
+import { Solicitacao } from '../../core/models/solicitacao.model';
+import { SolicitacaoENUM } from '../../core/models/solicitacaoENUM.model';
+import { SolicitacaoService } from '../../core/services/solicitacao.service';
+import { HistoricoService } from '../../core/services/historico.service';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-home-cliente',
