@@ -3,9 +3,10 @@ package com.web.equipe5.manutencaoequipamentos.service;
 import com.web.equipe5.manutencaoequipamentos.model.Solicitacao;
 import com.web.equipe5.manutencaoequipamentos.enums.EstadoSolicitacao;
 import com.web.equipe5.manutencaoequipamentos.repository.SolicitacaoRepository;
-import com.web.equipe5.manutencaoequipamentos.exception.ResourceNotFoundException;
+import com.web.equipe5.manutencaoequipamentos.exception.BusinessRuleException;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -14,66 +15,76 @@ public class SolicitacaoService {
 
     public SolicitacaoService(SolicitacaoRepository repository) {
         this.repository = repository;
- }
+    }
 
     public Solicitacao aprovar(Long id) {
-    Solicitacao s = repository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("Solicitação não encontrada"));
+        Solicitacao s = repository.findById(id)
+                .orElseThrow(() -> new BusinessRuleException("Solicitação não encontrada"));
 
-    if (s.getEstadoAtual() != EstadoSolicitacao.ORCADA) {
-        throw new ResourceNotFoundException("Só é possível aprovar solicitações ORÇADAS");
+        if (s.getEstadoAtual() != EstadoSolicitacao.ORCADA) {
+            throw new BusinessRuleException("Só é possível aprovar solicitações ORÇADAS");
+        }
+
+        s.setEstadoAtual(EstadoSolicitacao.APROVADA);
+        //Chamar e utilizar o historicoService aqui para registrar a transição, assim que ele for implementado.
+
+        return repository.save(s);
     }
 
-    s.setEstadoAtual(EstadoSolicitacao.APROVADA);
+    public Solicitacao rejeitar(Long id, String motivoRejeicao) {
+        if(motivoRejeicao == null || motivoRejeicao.isBlank()) {
+            throw new BusinessRuleException("É obrigatório informar o motivo da rejeição!");
+        }
 
-    return repository.save(s);
-}
+        Solicitacao s = repository.findById(id)
+                .orElseThrow(() -> new BusinessRuleException("Solicitação não encontrada"));
 
-   public Solicitacao rejeitar(Long id, String motivoRejeicao) {
-    Solicitacao s = repository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("Solicitação não encontrada"));
+        if (s.getEstadoAtual() != EstadoSolicitacao.ORCADA) {
+            throw new BusinessRuleException("Só é possível rejeitar solicitações ORÇADAS");
+        }
 
-    if (s.getEstadoAtual() != EstadoSolicitacao.ORCADA) {
-        throw new ResourceNotFoundException("Só é possível rejeitar solicitações ORÇADAS");
+        s.setEstadoAtual(EstadoSolicitacao.REJEITADA);
+        s.setMotivoRejeicao(motivoRejeicao);
+
+        //Chamar e utilizar o historicoService aqui para registrar a transição, assim que ele for implementado.
+        return repository.save(s);
     }
 
-    s.setEstadoAtual(EstadoSolicitacao.REJEITADA);
-    s.setMotivoRejeicao(motivoRejeicao);
+    public Solicitacao resgatar(Long id) {
+        Solicitacao s = repository.findById(id)
+                .orElseThrow(() -> new BusinessRuleException("Solicitação não encontrada"));
 
-    return repository.save(s);
-}
+        if (s.getEstadoAtual() != EstadoSolicitacao.REJEITADA) {
+            throw new BusinessRuleException("Só é possível resgatar solicitações REJEITADAS");
+        }
 
-   public Solicitacao resgatar(Long id) {
-    Solicitacao s = repository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("Solicitação não encontrada"));
+        s.setEstadoAtual(EstadoSolicitacao.APROVADA);
 
-    if (s.getEstadoAtual() != EstadoSolicitacao.REJEITADA) {
-        throw new ResourceNotFoundException("Só é possível resgatar solicitações REJEITADAS");
+        //Chamar e utilizar o historicoService aqui para registrar a transição, assim que ele for implementado.
+        return repository.save(s);
     }
 
-    s.setEstadoAtual(EstadoSolicitacao.APROVADA);
+    public Solicitacao pagar(Long id) {
+        Solicitacao s = repository.findById(id)
+                .orElseThrow(() -> new BusinessRuleException("Solicitação não encontrada"));
 
-    return repository.save(s);
-}   
+        if (s.getEstadoAtual() != EstadoSolicitacao.ARRUMADA) {
+            throw new BusinessRuleException("Só é possível pagar solicitações ARRUMADAS");
+        }
 
-   public Solicitacao pagar(Long id) {
-    Solicitacao s = repository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("Solicitação não encontrada"));
+        s.setEstadoAtual(EstadoSolicitacao.PAGA);
+        s.setDataHoraPagamento(LocalDateTime.now());
 
-    if (s.getEstadoAtual() != EstadoSolicitacao.ARRUMADA) {
-        throw new ResourceNotFoundException("Só é possível pagar solicitações ARRUMADAS");
+        //Chamar e utilizar o historicoService aqui para registrar a transição, assim que ele for implementado.
+        return repository.save(s);
     }
 
-    s.setEstadoAtual(EstadoSolicitacao.PAGA);
+    public List<Solicitacao> listarPorCliente(Long clienteId) {
+        return repository.findByClienteId(clienteId);
+    }
 
-    return repository.save(s);
- }  
-
-   public List<Solicitacao> listarPorCliente(Long clienteId) {
-    return repository.findByClienteId(clienteId);
-}
-   public List<Solicitacao> listarPorEstado(EstadoSolicitacao estado) {
-    return repository.findByEstadoAtual(estado);
- }
+    public List<Solicitacao> listarPorEstado(EstadoSolicitacao estado) {
+        return repository.findByEstadoAtual(estado);
+    }
 
 }
