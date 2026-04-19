@@ -12,7 +12,6 @@ public class ClienteMapper {
         c.setCpf(dto.cpf());
         c.setNome(dto.nome());
         c.setEmail(dto.email());
-        c.setSenha(dto.senha());
         c.setTelefone(dto.telefone());
         c.setAtivo(true);
         c.setDataCadastro(LocalDateTime.now());

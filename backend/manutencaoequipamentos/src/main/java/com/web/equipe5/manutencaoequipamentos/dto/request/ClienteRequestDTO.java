@@ -4,7 +4,6 @@ public record ClienteRequestDTO(
     String cpf,
     String nome,
     String email,
-    String senha,
     String telefone,
     EnderecoRequestDTO endereco
 ) {}
