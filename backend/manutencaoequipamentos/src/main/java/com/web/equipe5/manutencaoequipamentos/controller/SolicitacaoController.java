@@ -49,13 +49,13 @@ public class SolicitacaoController {
     }
 
     //atendendo a semana 7 do roadmap
-    @PatchMapping("/{id}/redirecionar")
+    @@PatchMapping("/{id}/redirecionar")
     public ResponseEntity<Solicitacao> redirecionar(
             @PathVariable Long id,
-            @RequestBody Map<String, Long> payload, 
+            @RequestBody RedirecionarRequestDTO dto,
             @RequestHeader("X-Funcionario-Id") Long idFuncionarioLogado) {
+        Long idFuncionarioDestino = dto.idFuncionarioDestino();
         
-        Long idFuncionarioDestino = payload.get("idFuncionarioDestino");
         return ResponseEntity.ok(service.redirecionar(id, idFuncionarioLogado, idFuncionarioDestino));
     }
     //atendendo a semana 7 do roadmap
