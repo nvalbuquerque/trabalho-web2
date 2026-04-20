@@ -1,22 +1,25 @@
 package com.web.equipe5.manutencaoequipamentos.service;
 
+import com.web.equipe5.manutencaoequipamentos.model.Funcionario;
 import com.web.equipe5.manutencaoequipamentos.model.Solicitacao;
 import com.web.equipe5.manutencaoequipamentos.enums.EstadoSolicitacao;
 import com.web.equipe5.manutencaoequipamentos.repository.SolicitacaoRepository;
+import com.web.equipe5.manutencaoequipamentos.repository.FuncionarioRepository;
 import com.web.equipe5.manutencaoequipamentos.exception.BusinessRuleException;
 import com.web.equipe5.manutencaoequipamentos.exception.ResourceNotFoundException;
-
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.util.List;
+
 
 @Service
 public class SolicitacaoService {
     private final SolicitacaoRepository repository;
+    private final FuncionarioRepository funcionarioRepository;
 
-    public SolicitacaoService(SolicitacaoRepository repository) {
+    public SolicitacaoService(SolicitacaoRepository repository, FuncionarioRepository funcionarioRepository) {
         this.repository = repository;
+        this.funcionarioRepository = funcionarioRepository;
     }
 
     public Solicitacao aprovar(Long id) {
@@ -87,6 +90,44 @@ public class SolicitacaoService {
 
     public List<Solicitacao> listarPorEstado(EstadoSolicitacao estado) {
         return repository.findByEstadoAtual(estado);
+    }
+
+    public Solicitacao redirecionar(Long idSolicitacao, Long idFuncionarioLogado, Long idFuncionarioDestino) {
+        Solicitacao s = repository.findById(idSolicitacao)
+                .orElseThrow(() -> new ResourceNotFoundException("Solicitação não encontrada"));
+
+        // Validação para redirecionar somente é liberado para status APROVADA ou REDIRECIONADA
+        if (s.getEstadoAtual() != EstadoSolicitacao.APROVADA && s.getEstadoAtual() != EstadoSolicitacao.REDIRECIONADA) {
+            throw new BusinessRuleException("O redirecionamento só é permitido para solicitações nos estados APROVADA ou REDIRECIONADA.");
+        }
+
+        if (idFuncionarioLogado.equals(idFuncionarioDestino)) {
+            throw new BusinessRuleException("Você não pode redirecionar a manutenção para si mesmo.");
+        }
+
+        Funcionario novoFuncionario = funcionarioRepository.findById(idFuncionarioDestino)
+                .orElseThrow(() -> new ResourceNotFoundException("Funcionário de destino não encontrado."));
+
+        s.setFuncionarioResponsavel(novoFuncionario);
+        s.setEstadoAtual(EstadoSolicitacao.REDIRECIONADA);
+
+        //TODO Chamar e utilizar o historicoService aqui para registrar a transição, assim que ele for implementado.
+        return repository.save(s);
+    }
+
+    public Solicitacao efetuarManutencao(Long id) {
+        Solicitacao s = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Solicitação não encontrada"));
+
+        // Regra do Roadmap: quando vem de REDIRECIONADA
+        if (s.getEstadoAtual() != EstadoSolicitacao.REDIRECIONADA) {
+            throw new BusinessRuleException("Só é possível efetuar manutenção II em solicitações REDIRECIONADAS");
+        }
+
+        s.setEstadoAtual(EstadoSolicitacao.ARRUMADA);
+
+        //TODO Chamar e utilizar o historicoService aqui para registrar a transição
+        return repository.save(s);
     }
 
 }

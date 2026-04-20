@@ -1,5 +1,6 @@
 package com.web.equipe5.manutencaoequipamentos.controller;
 
+import com.web.equipe5.manutencaoequipamentos.dto.RedirecionarRequestDTO;
 import com.web.equipe5.manutencaoequipamentos.model.Solicitacao;
 import com.web.equipe5.manutencaoequipamentos.service.SolicitacaoService;
 import com.web.equipe5.manutencaoequipamentos.enums.EstadoSolicitacao;
@@ -45,6 +46,22 @@ public class SolicitacaoController {
     @GetMapping("/estado")
     public ResponseEntity<List<Solicitacao>> listarPorEstado(@RequestParam EstadoSolicitacao estadoAtual) {
         return ResponseEntity.ok(service.listarPorEstado(estadoAtual));
+    }
+
+    //atendendo a semana 7 do roadmap
+    @PatchMapping("/{id}/redirecionar")
+    public ResponseEntity<Solicitacao> redirecionar(
+            @PathVariable Long id,
+            @RequestBody RedirecionarRequestDTO dto,
+            @RequestHeader("X-Funcionario-Id") Long idFuncionarioLogado) {
+        Long idFuncionarioDestino = dto.idFuncionarioDestino();
+        
+        return ResponseEntity.ok(service.redirecionar(id, idFuncionarioLogado, idFuncionarioDestino));
+    }
+    //atendendo a semana 7 do roadmap
+    @PatchMapping("/{id}/efetuar-manutencao")
+    public ResponseEntity<Solicitacao> efetuarManutencao(@PathVariable Long id) {
+        return ResponseEntity.ok(service.efetuarManutencao(id));
     }
 
 }
