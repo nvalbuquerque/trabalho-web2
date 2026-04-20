@@ -49,7 +49,7 @@ public class SolicitacaoController {
     }
 
     //atendendo a semana 7 do roadmap
-    @@PatchMapping("/{id}/redirecionar")
+    @PatchMapping("/{id}/redirecionar")
     public ResponseEntity<Solicitacao> redirecionar(
             @PathVariable Long id,
             @RequestBody RedirecionarRequestDTO dto,

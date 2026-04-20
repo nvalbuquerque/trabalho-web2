@@ -5,7 +5,7 @@ import com.web.equipe5.manutencaoequipamentos.enums.EstadoSolicitacao;
 import com.web.equipe5.manutencaoequipamentos.repository.SolicitacaoRepository;
 import com.web.equipe5.manutencaoequipamentos.exception.BusinessRuleException;
 import com.web.equipe5.manutencaoequipamentos.exception.ResourceNotFoundException;
-import com.web.equipe5.manutencaoequipamentos.repository.funcionarioRepository;
+import com.web.equipe5.manutencaoequipamentos.repository.FuncionarioRepository;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -16,7 +16,7 @@ public class SolicitacaoService {
     private final SolicitacaoRepository repository;
     private final FuncionarioRepository funcionarioRepository;
 
-    public SolicitacaoService(SolicitacaoRepository repository) {
+    public SolicitacaoService(SolicitacaoRepository repository, FuncionarioRepository funcionarioRepository) {
         this.repository = repository;
         this.funcionarioRepository = funcionarioRepository;
     }
