@@ -1,12 +1,12 @@
 package com.web.equipe5.manutencaoequipamentos.controller;
 
+import com.web.equipe5.manutencaoequipamentos.dto.RedirecionarRequestDTO;
 import com.web.equipe5.manutencaoequipamentos.model.Solicitacao;
 import com.web.equipe5.manutencaoequipamentos.service.SolicitacaoService;
 import com.web.equipe5.manutencaoequipamentos.enums.EstadoSolicitacao;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/solicitacoes")
