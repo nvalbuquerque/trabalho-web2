@@ -1,11 +1,8 @@
 package com.web.equipe5.manutencaoequipamentos.service;
 
-import com.web.equipe5.manutencaoequipamentos.dto.request.ClienteRequestDTO;
 import com.web.equipe5.manutencaoequipamentos.dto.request.FuncionarioRequestDTO;
 import com.web.equipe5.manutencaoequipamentos.dto.response.FuncionarioResponseDTO;
-import com.web.equipe5.manutencaoequipamentos.mapper.ClienteMapper;
 import com.web.equipe5.manutencaoequipamentos.mapper.FuncionarioMapper;
-import com.web.equipe5.manutencaoequipamentos.model.Cliente;
 import com.web.equipe5.manutencaoequipamentos.model.Funcionario;
 import com.web.equipe5.manutencaoequipamentos.repository.FuncionarioRepository;
 import com.web.equipe5.manutencaoequipamentos.exception.BusinessRuleException;
@@ -56,7 +53,7 @@ public class FuncionarioService {
     }
 
     @Transactional
-    public Funcionario salvar(FuncionarioRequestDTO requisicao) {
+    public FuncionarioResponseDTO salvar(FuncionarioRequestDTO requisicao) {
         if (requisicao.getNome() == null || requisicao.getNome().trim().isEmpty()) {
             throw new BusinessRuleException("Nome do funcionário é obrigatório.");
         }
@@ -71,6 +68,10 @@ public class FuncionarioService {
         
         if (requisicao.getCargo() == null || requisicao.getCargo().trim().isEmpty()) {
             throw new BusinessRuleException("Cargo do funcionário é obrigatório.");
+        }
+
+        if (requisicao.getDataNascimento() == null) {
+            throw new BusinessRuleException("Data de nascimento do funcionário é obrigatório.");
         }
         
         if (repository.existsByCpf(requisicao.getCpf())) {
@@ -94,9 +95,9 @@ public class FuncionarioService {
         funcionario.setSalt(saltHex);
 
         Funcionario salvo = repository.save(funcionario);
-        //emailService.enviarSenhaAutocadastro(salvo.getEmail(), salvo.getNome(), senhaBruta);
+        emailService.enviarSenhaAutocadastro(salvo.getEmail(), salvo.getNome(), senhaBruta);
 
-        return salvo;
+        return FuncionarioMapper.toDTO(salvo);
     }
 
     public Funcionario atualizar(Long id, Map<String, Object> campos) {
@@ -119,7 +120,7 @@ public class FuncionarioService {
                             throw new BusinessRuleException("Email já está em uso por outro funcionário: " + novoEmail);
                         }
                     }
-                    funcionarioExistente.setEmail((String) valor);  // ← pode ser 'novoEmail'
+                    funcionarioExistente.setEmail((String) valor);  
                     break;
                 case "cargo":
                     funcionarioExistente.setCargo((String) valor);
@@ -136,6 +137,21 @@ public class FuncionarioService {
 
                     funcionarioExistente.setSalt(novoSalt);
                     funcionarioExistente.setSenha(novoHash);
+                    break;
+                case "dataNascimento": 
+                    if (valor instanceof String) {
+                            // formato YYY-MM-dd (ISO)
+                            String dataStr = (String) valor;
+                            try {
+                                funcionarioExistente.setDataNascimento(LocalDate.parse(dataStr));
+                            } catch (DateTimeParseException e) {
+                                // aqui pega formato brasileiro dd-MM-YYYY
+                                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+                                funcionarioExistente.setDataNascimento(LocalDate.parse(dataStr, formatter));
+                            }
+                    } else if (valor instanceof LocalDate) {
+                        funcionarioExistente.setDataNascimento((LocalDate) valor);
+                    }
                     break;
                 default:
                     throw new BusinessRuleException("Campo desconhecido" + campo);

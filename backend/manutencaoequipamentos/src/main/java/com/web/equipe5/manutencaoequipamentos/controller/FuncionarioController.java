@@ -2,7 +2,6 @@ package com.web.equipe5.manutencaoequipamentos.controller;
 
 import com.web.equipe5.manutencaoequipamentos.dto.request.FuncionarioRequestDTO;
 import com.web.equipe5.manutencaoequipamentos.dto.response.FuncionarioResponseDTO;
-import com.web.equipe5.manutencaoequipamentos.mapper.FuncionarioMapper;
 import com.web.equipe5.manutencaoequipamentos.model.Funcionario;
 import com.web.equipe5.manutencaoequipamentos.service.FuncionarioService;
 
@@ -49,8 +48,7 @@ public class FuncionarioController {
 
     @PostMapping
     public ResponseEntity<FuncionarioResponseDTO> criar(@RequestBody FuncionarioRequestDTO requisicao) {
-        Funcionario funcionario = service.salvar(requisicao);
-        FuncionarioResponseDTO novoFuncionario = FuncionarioMapper.toDTO(funcionario);
+        FuncionarioResponseDTO novoFuncionario = service.salvar(requisicao);
         return ResponseEntity.status(HttpStatus.CREATED).body(novoFuncionario);
     }
     

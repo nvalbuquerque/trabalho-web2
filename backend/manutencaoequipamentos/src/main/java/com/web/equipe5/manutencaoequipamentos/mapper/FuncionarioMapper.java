@@ -14,6 +14,7 @@ public class FuncionarioMapper {
         f.setEmail(dto.getEmail());
         f.setSenha(dto.getSenha());
         f.setCargo(dto.getCargo());
+        f.setDataNascimento(dto.getDataNascimento());
         f.setAtivo(dto.getAtivo());
         return f;
     }
@@ -24,6 +25,7 @@ public class FuncionarioMapper {
             f.getNome(),
             f.getCpf(),
             f.getEmail(),
+            f.getDataNascimento(),
             f.getCargo(),
             f.getAtivo()
         );
