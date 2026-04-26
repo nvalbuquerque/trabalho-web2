@@ -112,7 +112,7 @@ export class RedirecionarManutencaoComponent implements OnInit {
 
       this.solicitacao!.estadoAtual = SolicitacaoENUM.REDIRECIONADA;
       this.solicitacao!.funcionarioResponsavel = funcionarioDestino;
-      this.solicitacaoService.atualizar(this.solicitacao!).subscribe({
+      this.solicitacaoService.redirecionar(this.solicitacao!).subscribe({
         next: () => {
           const sucessoRef = this.dialog.open(ModalGenericoComponent, {
             data: {

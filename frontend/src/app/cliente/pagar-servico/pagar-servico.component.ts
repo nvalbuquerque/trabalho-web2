@@ -74,7 +74,7 @@ export class PagarServicoComponent implements OnInit {
       this.solicitacao.estadoAtual = SolicitacaoENUM.PAGA;
       this.solicitacao.dataHoraPagamento = new Date().toISOString();
 
-      this.solicitacaoService.atualizar(this.solicitacao).subscribe({
+      this.solicitacaoService.pagar(this.solicitacao.id!).subscribe({ 
         next: () => {
           this.exibirModalConfirmacao = false;
 

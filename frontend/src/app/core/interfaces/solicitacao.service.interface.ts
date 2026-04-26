@@ -1,9 +1,9 @@
-import { Observable } from "rxjs/internal/Observable";
+import { Observable } from "rxjs";
 import { Solicitacao } from "../models/solicitacao.model"; 
 
 export interface ISolicitacaoService {
   listarTodos(): Observable<Solicitacao[]>;
-  buscarPorId(id: number): Observable<Solicitacao> | undefined;
+  buscarPorId(id: number): Observable<Solicitacao>;
   inserir(solicitacao: Solicitacao): Observable<Solicitacao>;
   atualizar(solicitacao: Solicitacao): Observable<Solicitacao>;
   remover(id: number): Observable<void>;

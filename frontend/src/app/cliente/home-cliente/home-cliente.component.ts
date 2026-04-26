@@ -71,7 +71,7 @@ export class HomeClienteComponent implements OnInit {
     this.nomeUsuario = this.authService.getNome() || 'Cliente';
     const emailLogado = this.authService.getEmail();
 
-    this.solicitacaoService.listarTodos().subscribe({
+    this.solicitacaoService.listarTodos().subscribe({ //TODO: Trocar por listarPorCliente(clienteId) apontando para GET /api/solicitacoes/cliente/{clienteId}: JESS
     next: (lista) => {
       this.listaSolicitacoes = lista
         .filter(s => s.cliente?.email === emailLogado)
@@ -84,7 +84,7 @@ export class HomeClienteComponent implements OnInit {
       this.identificarUltimoPedidoEmAnalise();
       this.atualizarPaginacao();
     },
-    error: () => {
+    error: () => { //TODO: Trocar por modal de erro: JESS
       this.aviso.open('Erro ao carregar solicitações.', 'OK', {
         duration: 3000,
         verticalPosition: 'top'
@@ -140,15 +140,15 @@ export class HomeClienteComponent implements OnInit {
       });
       item.estadoAtual = SolicitacaoENUM.APROVADA;
 
-      this.solicitacaoService.atualizar(item).subscribe({
+      this.solicitacaoService.resgatar(item.id!).subscribe({
       next: () => {
         this.carregarDadosIniciais();
 
         this.aviso.open('Solicitação resgatada! Estado alterado para APROVADA.','OK',
-          { duration: 3000, verticalPosition: 'top' }
+          { duration: 3000, verticalPosition: 'top'}
         );
       },
-      error: () => {
+      error: () => { //TODO: Trocar por modal de erro: JESS
         this.aviso.open('Erro ao resgatar solicitação.', 'OK', {
           duration: 3000,
           verticalPosition: 'top'

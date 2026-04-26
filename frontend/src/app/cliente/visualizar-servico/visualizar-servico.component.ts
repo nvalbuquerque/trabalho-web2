@@ -40,6 +40,7 @@ export class VisualizarServicoComponent implements OnInit {
     this.solicitacaoService.buscarPorId(id).subscribe((solicitacao) => {
       this.solicitacao = solicitacao;
 
+      //TODO: Ajustar historicoService para que se comunique com a API e traga os dados reais
       if (this.solicitacao) {
         this.historicoOrdenado = this.historicoService.listarPorSolicitacao(
           this.solicitacao.id!,
@@ -128,15 +129,13 @@ export class VisualizarServicoComponent implements OnInit {
 
     this.solicitacao.estadoAtual = SolicitacaoENUM.APROVADA;
 
-    this.solicitacaoService.atualizar(this.solicitacao).subscribe({
+    this.solicitacaoService.resgatar(this.solicitacao.id!).subscribe({
       next: () => {
         this.historicoOrdenado = this.historicoService.listarPorSolicitacao(
           this.solicitacao!.id!,
         );
       },
-      error: () => {
-        console.error('Erro ao atualizar solicitação');
-      },
+      //TODO: Ajustar para que mostre um modal de erro
     });
   }
 

@@ -58,6 +58,7 @@ export class HomeFuncionarioComponent implements OnInit {
       .filter(s => s.estadoAtual === SolicitacaoENUM.ABERTA)
       .sort((a, b) => new Date(a.dataHoraCriacao).getTime() - new Date(b.dataHoraCriacao).getTime());
       },
+      //Trocar para abrir um modal de erro 
       error: (erro) => {
       console.error('Erro ao carregar solicitações', erro);
       }

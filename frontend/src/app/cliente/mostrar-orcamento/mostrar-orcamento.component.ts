@@ -31,11 +31,12 @@ import { BotaoComponent } from '../../shared/botao/botao.component';
   styleUrl: './mostrar-orcamento.component.css',
 })
 export class MostrarOrcamentoComponent implements OnInit {
-  [x: string]: any;
+  
   private solicitacaoService = inject(SolicitacaoService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private http = inject(HttpClient);
+  
   solicitacao: Solicitacao | undefined;
   cliente: Cliente | undefined;
   funcionario: Funcionario | undefined;
@@ -86,8 +87,7 @@ export class MostrarOrcamentoComponent implements OnInit {
         this.funcionario = this.solicitacao.funcionarioResponsavel;
       }
     } catch (erro) {
-      console.error('Erro ao buscar orçamento da API:', erro);
-      //Adicionar alert customizado 
+      //TODO: Adicionar alert customizado 
     }
   }
 
@@ -110,8 +110,7 @@ export class MostrarOrcamentoComponent implements OnInit {
         this.solicitacao.estadoAtual = SolicitacaoENUM.APROVADA;
         this.estadoModal = 'sucesso';
       } catch (erro) {
-        console.error('Erro ao aprovar serviço:', erro);
-        //Adicionar alert customizado
+        //TODO: Adicionar alert customizado
       }
     }
   }
@@ -144,8 +143,7 @@ export class MostrarOrcamentoComponent implements OnInit {
         this.solicitacao.motivoRejeicao = this.motivoRejeicao;
         this.estadoModal = 'sucessoRejeicao';
       } catch (erro) {
-        console.error('Erro ao rejeitar serviço:', erro);
-        //Adicionar alert customizado
+        //TODO: Adicionar alert customizado
       }
     }
   }
