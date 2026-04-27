@@ -63,10 +63,10 @@ public class SolicitacaoController {
     public ResponseEntity<Solicitacao> redirecionar(
             @PathVariable Long id,
             @RequestBody RedirecionarRequestDTO dto,
-            @RequestHeader("X-Funcionario-Id") Long idFuncionarioLogado) {
-        Long idFuncionarioDestino = dto.idFuncionarioDestino();
-
-        return ResponseEntity.ok(service.redirecionar(id, idFuncionarioLogado, idFuncionarioDestino));
+            @AuthenticationPrincipal AuthenticatedPrincipal principal) {
+        return ResponseEntity.ok(
+            service.redirecionar(id, principal, dto.idFuncionarioDestino())
+        );
     }
 
     @PostMapping

@@ -130,7 +130,10 @@ export class EfetuarManutencaoComponent implements OnInit {
     this.solicitacao.orientacoesCliente = dados.orientacoes;
     this.solicitacao.funcionarioResponsavel = funcionarioLogado;
 
-    this.solicitacaoService.efetuarManutencao(this.solicitacao).subscribe({
+    this.solicitacaoService.efetuarManutencao(this.solicitacao.id!, {
+      descricaoManutencao: dados.descricao,
+      orientacoesCliente: dados.orientacoes,
+    }).subscribe({
       next: () => {
         this.form.reset();
         this.exibirModal = false;

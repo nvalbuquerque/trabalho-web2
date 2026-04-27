@@ -158,7 +158,11 @@ public class SolicitacaoService {
         return solicitacao;
     }
 
-    public Solicitacao redirecionar(Long idSolicitacao, Long idFuncionarioLogado, Long idFuncionarioDestino) {
+    public Solicitacao redirecionar(Long idSolicitacao, AuthenticatedPrincipal principal, Long idFuncionarioDestino) {
+        if (!"FUNCIONARIO".equalsIgnoreCase(principal.perfil())) {
+            throw new AccessDeniedException("Apenas funcionários podem redirecionar manutenções.");
+        }
+
         Solicitacao s = repository.findById(idSolicitacao)
                 .orElseThrow(() -> new ResourceNotFoundException("Solicitação não encontrada"));
 
@@ -166,7 +170,7 @@ public class SolicitacaoService {
             throw new BusinessRuleException("O redirecionamento só é permitido para solicitações nos estados APROVADA ou REDIRECIONADA.");
         }
 
-        if (idFuncionarioLogado.equals(idFuncionarioDestino)) {
+        if (principal.id().equals(idFuncionarioDestino)) {
             throw new BusinessRuleException("Você não pode redirecionar a manutenção para si mesmo.");
         }
 
