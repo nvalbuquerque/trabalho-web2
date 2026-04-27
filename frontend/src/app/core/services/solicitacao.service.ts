@@ -19,7 +19,7 @@ export class SolicitacaoService implements ISolicitacaoService {
 
   buscarPorId(id: number): Observable<Solicitacao> {
     return this.http.get<Solicitacao>(`${this.base}/${id}`, defaultHttpOptions);
-  } 
+  }
 
   inserir(solicitacao: Solicitacao): Observable<Solicitacao> {
     return this.http.post<Solicitacao>(this.base, solicitacao, defaultHttpOptions);
@@ -45,7 +45,7 @@ export class SolicitacaoService implements ISolicitacaoService {
   }
 
   atualizar(solicitacao: Solicitacao): Observable<Solicitacao> {
-    return this.http.patch<Solicitacao>(`${this.base}/${solicitacao.id}`, solicitacao, defaultHttpOptions); //put
+    return this.http.patch<Solicitacao>(`${this.base}/${solicitacao.id}`, solicitacao, defaultHttpOptions);
   }
 
   remover(id: number): Observable<void> {
@@ -56,11 +56,22 @@ export class SolicitacaoService implements ISolicitacaoService {
     return this.http.get<Solicitacao[]>(`${this.base}/cliente/${clienteId}`, defaultHttpOptions);
   }
 
-  efetuarManutencao(solicitacao: Solicitacao): Observable<Solicitacao> {
-    return this.http.patch<Solicitacao>(`${this.base}/${solicitacao.id}/efetuar-manutencao`, solicitacao, defaultHttpOptions);
+  redirecionar(id: number, idFuncionarioDestino: number): Observable<Solicitacao> {
+    return this.http.patch<Solicitacao>(
+      `${this.base}/${id}/redirecionar`,
+      { idFuncionarioDestino },
+      defaultHttpOptions
+    );
   }
 
-   redirecionar(solicitacao: Solicitacao): Observable<Solicitacao> {
-    return this.http.patch<Solicitacao>(`${this.base}/${solicitacao.id}/redirecionar`, solicitacao, defaultHttpOptions);
+  efetuarManutencao(
+    id: number,
+    dto: { descricaoManutencao: string; orientacoesCliente: string }
+  ): Observable<Solicitacao> {
+    return this.http.patch<Solicitacao>(
+      `${this.base}/${id}/efetuar-manutencao`,
+      dto,
+      defaultHttpOptions
+    );
   }
 }

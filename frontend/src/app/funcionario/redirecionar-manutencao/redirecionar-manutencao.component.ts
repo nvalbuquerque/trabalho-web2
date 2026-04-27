@@ -2,13 +2,12 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Solicitacao } from '../../core/models/solicitacao.model';
 import { Funcionario } from '../../core/models/funcionario.model';
 import { SolicitacaoService } from '../../core/services/solicitacao.service';
-import { HistoricoService } from '../../core/services/historico.service';
 import { FuncionarioService } from '../../core/services/funcionario.service';
 import { AuthService } from '../../core/services/auth.service';
-import { SolicitacaoENUM } from '../../core/models/solicitacaoENUM.model';
 import { CardVisualizacaoComponent } from '../../shared/card-visualizacao/card-visualizacao.component';
 import { BotaoAprovarComponent } from '../../shared/botao-aprovar/botao-aprovar.component';
 import { BotaoComponent } from '../../shared/botao/botao.component';
@@ -35,12 +34,12 @@ import {
 })
 export class RedirecionarManutencaoComponent implements OnInit {
   private solicitacaoService = inject(SolicitacaoService);
-  private historicoService = inject(HistoricoService);
   private funcionarioService = inject(FuncionarioService);
   private authService = inject(AuthService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private dialog = inject(MatDialog);
+  private aviso = inject(MatSnackBar);
 
   solicitacao?: Solicitacao;
   funcionarios: Funcionario[] = [];
@@ -75,7 +74,6 @@ export class RedirecionarManutencaoComponent implements OnInit {
 
   redirecionarManutencao(): void {
     if (!this.solicitacao || !this.funcionarioSelecionadoId) {
-      alert('Selecione um funcionário para redirecionar.');
       return;
     }
 
@@ -93,43 +91,40 @@ export class RedirecionarManutencaoComponent implements OnInit {
     dialogRef.afterClosed().subscribe((confirmou) => {
       if (!confirmou) return;
 
-      const funcionarioDestino = this.funcionarioService.buscarPorId(
-        this.funcionarioSelecionadoId!,
-      );
-      const emailLogado = this.authService.getEmail();
-      const funcionarioOrigem =
-        this.funcionarioService.buscarPorEmail(emailLogado);
+      this.solicitacaoService
+        .redirecionar(this.solicitacao!.id!, this.funcionarioSelecionadoId!)
+        .subscribe({
+          next: (solicitacaoAtualizada) => {
+            this.solicitacao = solicitacaoAtualizada;
 
-      this.historicoService.inserir({
-        dataHora: new Date().toISOString(),
-        estadoAnterior: this.solicitacao!.estadoAtual,
-        estadoNovo: SolicitacaoENUM.REDIRECIONADA,
-        solicitacaoId: this.solicitacao!.id!,
-        funcionario: funcionarioOrigem,
-        funcionarioDestino: funcionarioDestino,
-        observacao: `Redirecionada de ${funcionarioOrigem?.nome} para ${funcionarioDestino?.nome}.`,
-      });
+            const sucessoRef = this.dialog.open(ModalGenericoComponent, {
+              data: {
+                tipo: 'confirmacao',
+                titulo: 'Redirecionado!',
+                mensagem: `A solicitação #${this.solicitacao!.id} foi redirecionada para ${nomeFuncionario}.`,
+                textoConfirmar: 'Ok',
+                textoCancelar: '',
+              } as ModalDados,
+            });
 
-      this.solicitacao!.estadoAtual = SolicitacaoENUM.REDIRECIONADA;
-      this.solicitacao!.funcionarioResponsavel = funcionarioDestino;
-      this.solicitacaoService.redirecionar(this.solicitacao!).subscribe({
-        next: () => {
-          const sucessoRef = this.dialog.open(ModalGenericoComponent, {
-            data: {
-              tipo: 'confirmacao',
-              titulo: 'Redirecionado!',
-              mensagem: `A solicitação #${this.solicitacao!.id} foi redirecionada para ${nomeFuncionario}.`,
-              textoConfirmar: 'Ok',
-              textoCancelar: '',
-            } as ModalDados,
-          });
-          sucessoRef.afterClosed().subscribe(() => {
-            this.router.navigate(['/funcionario']);
-          });
-        },
-        error: (err) =>
-          alert('Erro ao tentar salvar o redirecionamento no servidor.'),
-      });
+            sucessoRef.afterClosed().subscribe(() => {
+              this.router.navigate(['/funcionario']);
+            });
+          },
+          error: (erro) => {
+            this.dialog.open(ModalGenericoComponent, {
+              data: {
+                tipo: 'confirmacao',
+                titulo: 'Erro no Redirecionamento',
+                mensagem:
+                  erro.error?.mensagem ||
+                  'Ocorreu um erro de comunicação com o servidor.',
+                textoConfirmar: 'Ok',
+                textoCancelar: '',
+              } as ModalDados,
+            });
+          },
+        });
     });
   }
 
