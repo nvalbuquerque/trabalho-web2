@@ -1,15 +1,11 @@
 package com.web.equipe5.manutencaoequipamentos.dto.request;
 import java.time.LocalDate;
 
-import lombok.Data;
-
-@Data
-public class FuncionarioRequestDTO {
-    private String nome;
-    private String cpf;
-    private String email;
-    private String senha;
-    private String cargo;
-    private LocalDate dataNascimento; 
-    private Boolean ativo;
-}
+public record FuncionarioRequestDTO(
+    String nome,
+    String cpf,
+    String email,
+    String senha,
+    String cargo,
+    LocalDate dataNascimento
+) {}

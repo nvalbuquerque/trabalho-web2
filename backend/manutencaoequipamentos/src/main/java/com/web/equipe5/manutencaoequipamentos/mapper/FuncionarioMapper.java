@@ -9,13 +9,15 @@ public class FuncionarioMapper {
 
     public static Funcionario toEntity(FuncionarioRequestDTO dto) {
         Funcionario f = new Funcionario();
-        f.setNome(dto.getNome());
-        f.setCpf(dto.getCpf());
-        f.setEmail(dto.getEmail());
-        f.setSenha(dto.getSenha());
-        f.setCargo(dto.getCargo());
-        f.setDataNascimento(dto.getDataNascimento());
-        f.setAtivo(dto.getAtivo());
+        f.setNome(dto.nome());
+        f.setCpf(dto.cpf());
+        f.setEmail(dto.email());
+        f.setSenha(dto.senha());
+        f.setCargo(dto.cargo());
+        f.setDataNascimento(dto.dataNascimento());
+
+        f.setAtivo(true);
+
         return f;
     }
 
@@ -26,8 +28,7 @@ public class FuncionarioMapper {
             f.getCpf(),
             f.getEmail(),
             f.getDataNascimento(),
-            f.getCargo(),
-            f.getAtivo()
+            f.getCargo()
         );
     }
 }

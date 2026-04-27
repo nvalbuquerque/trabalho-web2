@@ -54,36 +54,32 @@ public class FuncionarioService {
 
     @Transactional
     public FuncionarioResponseDTO salvar(FuncionarioRequestDTO requisicao) {
-        if (requisicao.getNome() == null || requisicao.getNome().trim().isEmpty()) {
+        if (requisicao.nome() == null || requisicao.nome().trim().isEmpty()) {
             throw new BusinessRuleException("Nome do funcionário é obrigatório.");
         }
         
-        if (requisicao.getCpf() == null || requisicao.getCpf().trim().isEmpty()) {
+        if (requisicao.cpf() == null || requisicao.cpf().trim().isEmpty()) {
             throw new BusinessRuleException("CPF do funcionário é obrigatório.");
         }
         
-        if (requisicao.getEmail() == null || requisicao.getEmail().trim().isEmpty()) {
+        if (requisicao.email() == null || requisicao.email().trim().isEmpty()) {
             throw new BusinessRuleException("Email do funcionário é obrigatório.");
         }
         
-        if (requisicao.getCargo() == null || requisicao.getCargo().trim().isEmpty()) {
+        if (requisicao.cargo() == null || requisicao.cargo().trim().isEmpty()) {
             throw new BusinessRuleException("Cargo do funcionário é obrigatório.");
         }
 
-        if (requisicao.getDataNascimento() == null) {
+        if (requisicao.dataNascimento() == null) {
             throw new BusinessRuleException("Data de nascimento do funcionário é obrigatório.");
         }
         
-        if (repository.existsByCpf(requisicao.getCpf())) {
+        if (repository.existsByCpf(requisicao.cpf())) {
             throw new BusinessRuleException("Já existe um funcionário com este CPF.");
         }
         
-        if (repository.existsByEmail(requisicao.getEmail())) {
+        if (repository.existsByEmail(requisicao.email())) {
             throw new BusinessRuleException("Já existe um funcionário com este email.");
-        }
-        
-        if (requisicao.getAtivo() == null) {
-            requisicao.setAtivo(true);
         }
         
         String senhaBruta = hashService.gerarSenha();
