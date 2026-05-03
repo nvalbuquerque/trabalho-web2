@@ -24,6 +24,12 @@ public class FuncionarioController {
 
     @GetMapping
     public ResponseEntity<List<Funcionario>> listar() {
+        List<Funcionario> lista = service.listarTodos();
+        return ResponseEntity.ok(lista);
+    }
+
+    @GetMapping("/ativos")
+    public ResponseEntity<List<Funcionario>> listarAtivos() {
         List<Funcionario> lista = service.listarAtivos();
         return ResponseEntity.ok(lista);
     }

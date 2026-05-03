@@ -38,6 +38,10 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/clientes").permitAll()
                 .requestMatchers("/error").permitAll()
+                
+                .requestMatchers("/api/categorias/**").hasRole("FUNCIONARIO")
+                .requestMatchers("/api/funcionarios/**").hasRole("FUNCIONARIO")
+
                 .anyRequest().authenticated()
             )
             .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);

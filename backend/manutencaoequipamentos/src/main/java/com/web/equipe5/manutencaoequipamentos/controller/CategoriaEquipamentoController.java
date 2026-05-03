@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 import java.util.List;
 
-
 @RestController
 @RequestMapping("/api/categorias")
 public class CategoriaEquipamentoController {
@@ -22,7 +21,18 @@ public class CategoriaEquipamentoController {
 
     @GetMapping
     public ResponseEntity<List<CategoriaEquipamento>> listar() {
+        return ResponseEntity.ok(service.listarTodas());
+    }
+
+    @GetMapping("/ativas")
+    public ResponseEntity<List<CategoriaEquipamento>> listarAtivas() {
         return ResponseEntity.ok(service.listarAtivas());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<CategoriaEquipamento> buscarPorId(@PathVariable Long id) {
+        CategoriaEquipamento categoria = service.buscarPorId(id);
+        return ResponseEntity.ok(categoria);
     }
     
     @PostMapping
