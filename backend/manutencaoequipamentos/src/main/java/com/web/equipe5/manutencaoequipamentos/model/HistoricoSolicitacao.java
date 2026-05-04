@@ -1,6 +1,5 @@
 package com.web.equipe5.manutencaoequipamentos.model;
 
-
 import com.web.equipe5.manutencaoequipamentos.enums.EstadoSolicitacao;
 import jakarta.persistence.*;
 import lombok.Getter;
