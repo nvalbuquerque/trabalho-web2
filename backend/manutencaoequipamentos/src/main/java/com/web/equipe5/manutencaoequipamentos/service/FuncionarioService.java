@@ -93,8 +93,6 @@ public class FuncionarioService {
         Funcionario funcionario = FuncionarioMapper.toEntity(requisicao);
         funcionario.setSenha(hashHex);
         funcionario.setSalt(saltHex);
-
-        funcionario.setRole("FUNCIONARIO");
         
         Funcionario salvo = repository.save(funcionario);
         emailService.enviarSenhaAutocadastro(salvo.getEmail(), salvo.getNome(), senhaBruta);

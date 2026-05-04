@@ -80,9 +80,8 @@ export class CategoriaService implements ICategoriaService {
   }
 
   remover(id: number): Observable<CategoriaEquipamento> {
-    return this.http.patch<CategoriaEquipamento>(
+    return this.http.delete<CategoriaEquipamento>(
       `${this.apiUrl}/${id}`,
-      { ativo: false },
       defaultHttpOptions
     ).pipe(
       catchError(error => {

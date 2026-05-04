@@ -25,7 +25,4 @@ public class Funcionario {
     private LocalDate dataNascimento;
     private String cargo;
     private Boolean ativo = true;
-
-    @Column(nullable = false)
-    private String role = "FUNCIONARIO";
 }

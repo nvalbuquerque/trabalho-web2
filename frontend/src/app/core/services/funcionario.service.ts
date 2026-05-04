@@ -28,37 +28,43 @@ export class FuncionarioService implements IFuncionarioService {
     );
   }
 
-  buscarPorId(id: number): Observable<Funcionario | undefined> {
-    return this.listarTodos().pipe(
-      map(funcionarios => funcionarios.find(f => f.id === id)),
+  buscarPorId(id: number): Observable<Funcionario> {
+  return this.http.get<Funcionario>(
+    `${this.apiUrl}/${id}`,
+    defaultHttpOptions
+  ).pipe(
+    catchError(error => {
+      console.error(`Erro ao buscar funcionário com ID ${id}:`, error);
+      throw error;
+    })
+  );
+}
+
+  buscarPorEmail(email: string): Observable<Funcionario> {
+    return this.http.get<Funcionario>(
+      `${this.apiUrl}/email/${email}`,
+      defaultHttpOptions
+    ).pipe(
       catchError(error => {
-        console.error('Erro ao buscar funcionário por ID:', error);
+        console.error(`Erro ao buscar funcionário com email ${email}:`, error);
         throw error;
       })
     );
   }
 
-  buscarPorEmail(email: string): Observable<Funcionario | undefined> {
-    return this.listarTodos().pipe(
-      map(funcionarios => funcionarios.find(f => f.email === email)),
-      catchError(error => {
-        console.error('Erro ao buscar funcionário por email:', error);
-        throw error;
-      })
-    );
-  }
-
-  buscarPorCpf(cpf: string): Observable<Funcionario | undefined> {
+  buscarPorCpf(cpf: string): Observable<Funcionario> {
     const cpfLimpo = cpf.replace(/\D/g, '');
-    return this.listarTodos().pipe(
-      map(funcionarios => funcionarios.find(f => f.cpf.replace(/\D/g, '') === cpfLimpo)),
+    return this.http.get<Funcionario>(
+      `${this.apiUrl}/cpf/${cpfLimpo}`,
+      defaultHttpOptions
+    ).pipe(
       catchError(error => {
-        console.error('Erro ao buscar funcionário por CPF:', error);
+        console.error(`Erro ao buscar funcionário com CPF ${cpfLimpo}:`, error);
         throw error;
       })
     );
   }
-
+    
   inserir(funcionario: Funcionario): Observable<Funcionario> {
     return this.http.post<Funcionario>(
       this.apiUrl,
